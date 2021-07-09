@@ -1,0 +1,23 @@
+# REST API
+/rest-api/.idea
+/rest-api/.vscode
+
+/rest-api/*.suo
+/rest-api/*.user
+/rest-api/*.userosscache
+/rest-api/*.sln.docstates
+
+/rest-api/*/[Dd]ebug/
+/rest-api/*/[Dd]ebugPublic/
+/rest-api/*/[Rr]elease/
+/rest-api/*/[Rr]eleases/
+/rest-api/*/x64/
+/rest-api/*/x86/
+/rest-api/*/build/
+/rest-api/*/bld/
+/rest-api/*/[Bb]in/
+/rest-api/*/[Oo]bj/
+/rest-api/*/[Oo]ut/
+/rest-api/*/msbuild.log
+/rest-api/*/msbuild.err
+/rest-api/*/msbuild.wrn
