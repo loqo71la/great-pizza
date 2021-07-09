@@ -1,15 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GreatPizza.Infrastructure\GreatPizza.Infrastructure.csproj" />
       <ProjectReference Include="..\GreatPizza.Program\GreatPizza.Program.csproj" />
     </ItemGroup>
 

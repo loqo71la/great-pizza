@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using GreatPizza.Domain.Commons;
 using GreatPizza.Domain.Entities;
 using GreatPizza.Domain.Interfaces;
 using GreatPizza.WebApi.DTOs;
@@ -48,14 +49,14 @@ namespace GreatPizza.WebApi.Test.Controllers
                 new object[] {"", 0, 1, 1, null, null, emptyPizzas},
                 new object[] {"?limit=10&page=1", 0, 1, 1, null, null, emptyPizzas},
                 new object[] {"", 3, 1, 1, null, null, pizzas},
-                new object[] {"?limit=1", 3, 3, 1, "https://localhost:5001/api/pizza?limit=1&page=2", null, pizzas},
+                new object[] {"?limit=1", 3, 3, 1, "http://localhost/api/pizza?page=2&limit=1", null, pizzas},
                 new object[]
                 {
-                    "?limit=1&page=2", 3, 3, 2, "https://localhost:5001/api/pizza?limit=1&page=1",
-                    "https://localhost:5001/api/pizza?limit=1&page=3", pizzas
+                    "?page=2&limit=1", 3, 3, 2, "http://localhost/api/pizza?page=3&limit=1",
+                    "http://localhost/api/pizza?page=1&limit=1", pizzas
                 },
                 new object[]
-                    {"?limit=1&page=3", 3, 3, 3, null, "https://localhost:5001/api/pizza?limit=1&page=2", pizzas},
+                    {"?page=3&limit=1", 3, 3, 3, null, "http://localhost/api/pizza?page=2&limit=1", pizzas},
             };
         }
 
@@ -73,7 +74,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.GetAsync($"/api/pizza{query}");
             var content = await response.Content.ReadAsStringAsync();
-            var pageDto = Deserialize<PageDTO<PizzaDTO>>(content);
+            var pageDto = JsonSerializer.Deserialize<PageDTO<PizzaDTO>>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -101,10 +102,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.GetAsync("/api/pizza/1");
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
@@ -123,7 +123,7 @@ namespace GreatPizza.WebApi.Test.Controllers
                 Name = "Hawaiian",
                 Price = 12.95m,
                 Size = "L",
-                CreatedDate = new DateTime(2021, 7, 7),
+                CreatedDate = new DateTime(2021, 7, 7, 0, 0, 0, DateTimeKind.Utc),
                 Toppings = new[] {new Topping {Id = 1}, new Topping {Id = 2}}
             };
             _mockPizzaRepository.Setup(repository => repository.Get(1))
@@ -132,7 +132,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.GetAsync("/api/pizza/1");
             var content = await response.Content.ReadAsStringAsync();
-            var pizzaDto = Deserialize<PizzaDTO>(content);
+            var pizzaDto = JsonSerializer.Deserialize<PizzaDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -143,7 +143,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             Assert.Equal("Hawaiian", pizzaDto.Name);
             Assert.Equal(12.95m, pizzaDto.Price);
             Assert.Equal("L", pizzaDto.Size);
-            Assert.Equal("2021-07-07T00:00:00.00Z", pizzaDto.CreatedDate);
+            Assert.Equal("2021-07-07T00:00:00.000Z", pizzaDto.CreatedDate);
             Assert.Equal("1,2", string.Join(",", pizzaDto.Toppings.Select(topping => topping.Id)));
             _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         }
@@ -163,15 +163,14 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PostAsync("/api/pizza", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
             Assert.Equal("Success", responseDto.Status);
-            Assert.Equal("https://localhost:5001/api/pizza/1", responseDto.Message);
+            Assert.Equal("http://localhost/api/pizza/1", responseDto.Message);
             _mockPizzaRepository.Verify(repository => repository.GetWhere(It.IsAny<Expression<Func<Pizza, bool>>>()),
                 Times.Once);
             _mockPizzaRepository.Verify(repository => repository.Add(It.IsAny<Pizza>()), Times.Once);
@@ -189,10 +188,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PostAsync("/api/pizza", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
@@ -215,10 +213,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PutAsync("/api/pizza/1", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
@@ -242,7 +239,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PutAsync("/api/pizza/1", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -265,7 +262,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.DeleteAsync("/api/pizza/1");
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -290,7 +287,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.DeleteAsync("/api/pizza/1");
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -313,10 +310,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PostAsync("/api/pizza/1/topping:assign", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
@@ -340,10 +336,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PostAsync("/api/pizza/1/topping:assign", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
@@ -367,7 +362,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.PostAsync("/api/pizza/1/topping:assign", body);
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -381,7 +376,6 @@ namespace GreatPizza.WebApi.Test.Controllers
             _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
         }
 
-
         [Fact]
         public async Task Delete_AssignedToppingWhenPizzaDoesNotExist_ReturnsErrorResponse()
         {
@@ -392,10 +386,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.DeleteAsync("/api/pizza/1/topping/3");
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
@@ -415,7 +408,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.DeleteAsync("/api/pizza/1/topping/3");
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -427,7 +420,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
             _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
         }
-        
+
         [Fact]
         public async Task Delete_UnassignedToppingWhenPizzaExist_ReturnsDeletedResponse()
         {
@@ -438,7 +431,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             // Act
             var response = await _client.DeleteAsync("/api/pizza/1/topping/15");
             var content = await response.Content.ReadAsStringAsync();
-            var responseDto = Deserialize<ResponseDTO>(content);
+            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -448,13 +441,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             Assert.Equal("Success", responseDto.Status);
             Assert.Equal("Topping with ID [15] was successfully unassigned.", responseDto.Message);
             _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
-            _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Never);
-        }
-
-        private static T Deserialize<T>(string content)
-        {
-            var jsonOptions = new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
-            return JsonSerializer.Deserialize<T>(content, jsonOptions);
+            _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
         }
     }
 }

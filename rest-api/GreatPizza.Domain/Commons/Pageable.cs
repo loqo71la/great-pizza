@@ -1,4 +1,4 @@
-﻿namespace GreatPizza.Domain.Entities
+﻿namespace GreatPizza.Domain.Commons
 {
     public class Pageable
     {

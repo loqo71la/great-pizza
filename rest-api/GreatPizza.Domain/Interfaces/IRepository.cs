@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using GreatPizza.Domain.Commons;
 using GreatPizza.Domain.Entities;
 
 namespace GreatPizza.Domain.Interfaces
