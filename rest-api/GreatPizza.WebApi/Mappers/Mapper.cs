@@ -13,7 +13,7 @@ namespace GreatPizza.WebApi.Mappers
 
         public virtual TE ToEntity(TD dto)
         {
-            var entity = new TE {Id = dto.Id};
+            var entity = new TE {Id = dto.Id, Type = dto.Type};
             if (!string.IsNullOrEmpty(dto.CreatedDate))
             {
                 entity.CreatedDate = DateTime.Parse(dto.CreatedDate);
@@ -27,7 +27,7 @@ namespace GreatPizza.WebApi.Mappers
 
         public virtual TD ToDTO(TE entity)
         {
-            var dto = new TD {Id = entity.Id};
+            var dto = new TD {Id = entity.Id, Type = entity.Type};
             if (entity.CreatedDate != DateTime.MinValue)
             {
                 dto.CreatedDate = entity.CreatedDate.ToUniversalTime().ToString(DateFormat);

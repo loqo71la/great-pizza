@@ -43,6 +43,7 @@ namespace GreatPizza.Program.Services
             }
             entity.Id = id;
             entity.ModifiedDate = DateTime.Now;
+            entity.CreatedDate = savedEntity.CreatedDate;
             await _repository.Update(entity);
         }
 

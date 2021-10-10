@@ -47,20 +47,24 @@ namespace GreatPizza.Infrastructure.Persistence.Repositories
             await _gpContext.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Topping>> GetAll(Pageable pageable)
+        public Task<IEnumerable<Topping>> GetAll(Pageable pageable = null)
         {
             return GetAllWhere(topping => true, pageable);
         }
 
         public async Task<IEnumerable<Topping>> GetAllWhere(Expression<Func<Topping, bool>> predicate,
-            Pageable pageable)
+            Pageable pageable = null)
         {
-            return await _gpContext.Toppings
+            IQueryable<Topping> queryable = _gpContext.Toppings
                 .Where(predicate)
-                .Skip(pageable.Offset)
-                .Take(pageable.Limit)
-                .OrderByDescending(topping => topping.CreatedDate)
-                .ToListAsync();
+                .OrderByDescending(topping => topping.CreatedDate);
+            if (pageable != null)
+            {
+                queryable = queryable
+                    .Skip(pageable.Offset)
+                    .Take(pageable.Limit);
+            }
+            return await queryable.ToListAsync();
         }
 
         public ValueTask<int> Count()

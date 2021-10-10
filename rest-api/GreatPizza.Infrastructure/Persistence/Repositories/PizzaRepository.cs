@@ -50,21 +50,25 @@ namespace GreatPizza.Infrastructure.Persistence.Repositories
             await _gpContext.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Pizza>> GetAll(Pageable pageable)
+        public Task<IEnumerable<Pizza>> GetAll(Pageable pageable = null)
         {
             return GetAllWhere(pizza => true, pageable);
         }
 
-        public async Task<IEnumerable<Pizza>> GetAllWhere(Expression<Func<Pizza, bool>> predicate, Pageable pageable)
+        public async Task<IEnumerable<Pizza>> GetAllWhere(Expression<Func<Pizza, bool>> predicate, Pageable pageable = null)
         {
-            return await _gpContext.Pizzas
+            IQueryable<Pizza> queryable = _gpContext.Pizzas
                 .Include(pizza => pizza.Toppings)
                 .AsNoTracking()
                 .Where(predicate)
-                .Skip(pageable.Offset)
-                .Take(pageable.Limit)
-                .OrderByDescending(pizza => pizza.CreatedDate)
-                .ToListAsync();
+                .OrderByDescending(pizza => pizza.CreatedDate);
+            if (pageable != null)
+            {
+                queryable = queryable
+                    .Skip(pageable.Offset)
+                    .Take(pageable.Limit);
+            }
+            return await queryable.ToListAsync();
         }
 
         public ValueTask<int> Count()

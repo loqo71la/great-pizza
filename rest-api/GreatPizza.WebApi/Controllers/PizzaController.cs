@@ -62,30 +62,14 @@ namespace GreatPizza.WebApi.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AssignTopping(int id, [FromBody] ToppingDTO toppingDto)
+        public async Task<IActionResult> AssignTopping(int id, [FromBody] AssignedToppingDTO assignedtoppingDto)
         {
             var pizzaService = (IPizzaService) _service;
-            await pizzaService.AssignTopping(id, toppingDto.Id);
+            await pizzaService.AssignTopping(id, assignedtoppingDto.Ids);
             var responseDto = new ResponseDTO
             {
                 Status = "Success",
-                Message = $"Topping with ID [{toppingDto.Id}] was successfully assigned."
-            };
-            return Ok(responseDto);
-        }
-        
-        [HttpDelete("{pizzaId}/topping/{toppingId}")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseDTO))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AssignTopping(int pizzaId, int toppingId)
-        {
-            var pizzaService = (IPizzaService) _service;
-            await pizzaService.RemoveAssignedTopping(pizzaId, toppingId);
-            var responseDto = new ResponseDTO
-            {
-                Status = "Success",
-                Message = $"Topping with ID [{toppingId}] was successfully unassigned."
+                Message = $"Toppings with IDs [{string.Join(",", assignedtoppingDto.Ids)}] were successfully assigned."
             };
             return Ok(responseDto);
         }

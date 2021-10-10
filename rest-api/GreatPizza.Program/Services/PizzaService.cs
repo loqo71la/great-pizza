@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GreatPizza.Domain.Entities;
 using GreatPizza.Domain.Interfaces;
@@ -27,35 +28,21 @@ namespace GreatPizza.Program.Services
             await base.Add(newPizza);
         }
 
-        public async Task AssignTopping(int pizzaId, int toppingId)
+        public async Task AssignTopping(int pizzaId, IEnumerable<int> toppingIds)
         {
             var pizza = await _repository.Get(pizzaId);
             if (pizza == null)
             {
                 throw new NotFoundException(typeof(Pizza), pizzaId);
             }
-            var topping = await _toppingRepository.Get(toppingId);
-            if (topping == null)
+            var toppings = await _toppingRepository.GetAllWhere(topping => toppingIds.Contains(topping.Id));
+            var notFoundToppings = toppingIds.Except(toppings.Select(topping => topping.Id));
+            if (notFoundToppings.Any())
             {
-                throw new NotFoundException(typeof(Topping), toppingId);
+                throw new NotFoundException(typeof(Topping), string.Join(",", notFoundToppings));
             }
-            if (pizza.Toppings.All(assignedTopping => assignedTopping.Id != toppingId))
-            {
-                var toppings = pizza.Toppings.ToList();
-                toppings.Add(topping);
-                pizza.Toppings = toppings;
-                await _repository.Update(pizza);
-            }
-        }
 
-        public async Task RemoveAssignedTopping(int pizzaId, int toppingId)
-        {
-            var pizza = await _repository.Get(pizzaId);
-            if (pizza == null)
-            {
-                throw new NotFoundException(typeof(Pizza), pizzaId);
-            }
-            pizza.Toppings.ToList().RemoveAll(topping => topping.Id == toppingId);
+            pizza.Toppings = toppings.ToList();
             await _repository.Update(pizza);
         }
     }

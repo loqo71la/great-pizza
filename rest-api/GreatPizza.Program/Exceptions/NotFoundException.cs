@@ -6,13 +6,12 @@ namespace GreatPizza.Program.Exceptions
 {
     public class NotFoundException : Exception
     {
-        public NotFoundException(MemberInfo type, int id) : base(LoadMessage(type, id))
+        public NotFoundException(MemberInfo type, int id) : base($"{type.Name} with ID [{id}] was not found.")
         {
         }
 
-        private static string LoadMessage(MemberInfo type, int id)
+        public NotFoundException(MemberInfo type, string ids) : base($"{type.Name}s with IDs [{ids}] were not found.")
         {
-            return $"{type.Name} with ID [{id}] was not found.";
         }
     }
 }

@@ -16,8 +16,8 @@ namespace GreatPizza.Domain.Interfaces
         Task Update(T entity);
         Task Remove(T entity);
 
-        Task<IEnumerable<T>> GetAll(Pageable pageable);
-        Task<IEnumerable<T>> GetAllWhere(Expression<Func<T, bool>> predicate, Pageable pageable);
+        Task<IEnumerable<T>> GetAll(Pageable pageable = null);
+        Task<IEnumerable<T>> GetAllWhere(Expression<Func<T, bool>> predicate, Pageable pageable = null);
 
         ValueTask<int> Count();
         ValueTask<int> CountWhere(Expression<Func<T, bool>> predicate);
