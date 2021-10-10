@@ -1,0 +1,13 @@
+<ng-container *ngIf="pizzaPageable">
+    <gp-viewer-items name="Pizzas" [pageable]="pizzaPageable" (openModal)="onOpenModal()"></gp-viewer-items>
+    <gp-viewer-page [pageable]="pizzaPageable" (actions)="onActions($event)"></gp-viewer-page>
+    <gp-pagination [currentPage]="pizzaPageable.currentPage" [totalPages]="pizzaPageable.totalPages"
+        (changedPage)="loadPizzas($event)" *ngIf="pizzaPageable"></gp-pagination>
+</ng-container>
+
+<gp-modal title="Add Pizza" (saved)="add()">
+    <gp-name-input [(name)]="pizza.name"></gp-name-input>
+    <gp-price-input [(price)]="pizza.price"></gp-price-input>
+    <gp-selected-input [headers]="pizzas" [(type)]="pizza.type"></gp-selected-input>
+    <gp-selected-topping-input [(toppings)]="pizza.toppings"></gp-selected-topping-input>
+</gp-modal>

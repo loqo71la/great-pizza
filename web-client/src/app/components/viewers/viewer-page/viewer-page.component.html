@@ -1,0 +1,25 @@
+<div class="mb-2">
+    <div class="card" *ngFor="let item of pageable.items">
+        <div class="card-body d-flex align-items-center">
+            <div class="rounded" [ngClass]="item.icon"></div>
+            <div class="ms-3 flex-grow-1">
+                <h5 class="mb-0">{{item.name}}</h5>
+                <p class="item-date">
+                    <span class="fw-bold">Last update:</span> {{getLastModified(item) | date: 'medium' }}
+                </p>
+                <p class="mb-0" *ngIf="item.toppings">{{toStringToppings(item)}}</p>
+            </div>
+            <div class="item-price">
+                <span>{{item.price}} $</span>
+            </div>
+            <div class="d-flex">
+                <a class="btn btn-white btn-circle ml-2">
+                    <i class="bi bi-pencil-fill"></i>
+                </a>
+                <a class="btn btn-main btn-circle ml-2">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

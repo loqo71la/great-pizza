@@ -1,0 +1,113 @@
+:root {
+    --gp-text-primary: #24292e;
+    --gp-text-secondary: #717880;
+    --gp-text-dark: #ffffff;
+    --gp-text-subtitle: #ffe600;
+    --gp-bg-primary: #f4f8ff;
+    --gp-bg-header: #001950;
+    --gp-bg-header-action: #003c8b;
+    --gp-bg-header-card: #01a2ec;
+    --gp-bg-btn-main: #00aeff;
+    --gp-bg-btn-main-hover: #01a2ec;
+    --gp-bg-btn: #ffffff;
+    --gp-bg-btn-hover: #f8f9fa;
+    --gp-bg-input: #ffe600;
+    --gp-border: #ced4da;
+}
+
+html, body {
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+    background-color: var(--gp-bg-primary) !important;
+    color: var(--gp-text-primary) !important;
+    font-weight: 300;
+}
+
+.btn-circle {
+    width: 40px;
+    max-width: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+}
+
+.btn-white {
+    background-color: var(--gp-bg-btn);
+    color: var(--gp-text-primary);
+}
+
+.btn-white:hover {
+    background-color: var(--gp-bg-btn-hover);
+}
+
+.btn-main {
+    background-color: var(--gp-bg-btn-main) !important;
+    color: white !important;
+}
+
+.btn-main:hover {
+    background-color: var(--gp-bg-btn-main-hover);
+    color: white;
+}
+
+.pz1, .pz2, .pz3, .pz4 {
+    background-image: url('../src/assets/pizzas.png');
+    background-repeat: no-repeat;
+    background-position-y: 0px;
+    width: 80px;
+    height: 80px;
+}
+
+.pz1 {
+    background-position-x: 0px;
+}
+
+.pz2 {
+    background-position-x: -80px;
+}
+
+.pz3 {
+    background-position-x: -160px;
+}
+
+.pz4 {
+    background-position-x: -240px;
+}
+
+.tp1, .tp2, .tp3, .tp4, .tp5, .tp6, .tp7, .tp8, .tp9, .tp10, .tp11, .tp12 {
+    background-image: url('../src/assets/toppings.png');
+    background-repeat: no-repeat;
+    min-width: 50px;
+    width: 50px;
+    height: 50px;
+}
+
+.tp1, .tp2, .tp3, .tp4, .tp5, .tp6 {
+    background-position-y: 0px;
+}
+
+.tp7, .tp8, .tp9, .tp10, .tp11, .tp12 {
+    background-position-y: -50px;
+}
+
+.tp1, .tp7 {
+    background-position-x: 0px;
+}
+
+.tp2, .tp8 {
+    background-position-x: -50px;
+}
+
+.tp3, .tp9 {
+    background-position-x: -100px;
+}
+
+.tp4, .tp10 {
+    background-position-x: -150px;
+}
+
+.tp5, .tp11 {
+    background-position-x: -200px;
+}
+
+.tp6, .tp12 {
+    background-position-x: -250px;
+}

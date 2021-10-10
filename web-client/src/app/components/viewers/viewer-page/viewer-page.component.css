@@ -1,0 +1,15 @@
+div.card-body {
+    padding: 0.5rem 0.5rem;
+}
+
+p.item-date {
+    font-size: small;
+    font-style: italic;
+    margin-bottom: 0px;
+}
+
+.item-price {
+    color: #7E7E7E;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
