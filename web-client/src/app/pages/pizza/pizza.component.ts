@@ -4,7 +4,6 @@ import { Modal } from 'bootstrap';
 import { PizzaService } from 'src/app/services/pizza.service';
 import { Pageable } from 'src/app/shared/models/pageable';
 import { Pizza } from 'src/app/shared/models/pizza';
-import { Response } from 'src/app/shared/models/response';
 
 const DefaultPizzas = ['pz1', 'pz2', 'pz3', 'pz4'];
 
@@ -15,7 +14,6 @@ const DefaultPizzas = ['pz1', 'pz2', 'pz3', 'pz4'];
 })
 export class PizzaComponent implements OnInit {
   pizzaPageable: Pageable<Pizza>;
-  errorResponse: Response;
   pizzas: string[];
   modal: Modal;
   pizza: Pizza;
@@ -37,25 +35,44 @@ export class PizzaComponent implements OnInit {
     this.modal.show();
   }
 
-  onActions(type: any) {
+  onActions(value: any) {
+    const current = this.pizzaPageable.items[value.index];
+    if (value.action === 'edit') {
+      this.pizza = { ...current, toppings: current.toppings.map((topping: any) => topping.id) }
+      this.modal.show();
+    }
 
+    if (value.action === 'delete') {
+      var response = confirm(`Are you sure you want to delete "${current.name}"`);
+      if (response) this.pizzaService.delete(current.id).subscribe(_ => this.loadPizzas());
+    }
   }
 
-  add() {
-    this.pizzaService.add(this.pizza)
-      .subscribe(
-        _ => {
-          this.modal.hide();
-          this.loadPizzas();
-        }, response => {
-          this.errorResponse = response.error;
-          console.log(this.errorResponse.message);
-        }
-      );
+  onSuccess(): void {
+    const success = response => {
+      if (this.pizza.toppings) {
+        this.pizzaService.assign(this.loadPizzaId(response), this.pizza.toppings).
+          subscribe(_ => this.closeModal());
+      } else this.closeModal();
+    };
+    const error = response => console.log(response.error.message);
+    if (this.pizza.id) this.pizzaService.update(this.pizza).subscribe(success, error);
+    else this.pizzaService.add(this.pizza).subscribe(success, error);
+  }
+
+  private loadPizzaId(response: any): number {
+    if (this.pizza.id) return this.pizza.id;
+    const match = response.message.match(/.+pizza\/(?<pizzaId>\d+)/);
+    return Number(match.groups['pizzaId'] || 0);
+  }
+
+  private closeModal(): void {
+    this.modal.hide();
+    this.loadPizzas();
   }
 
   private loadPizzas(): void {
-    this.pizzaService.getAll().subscribe(pizzaPage => this.pizzaPageable = pizzaPage);
+    this.pizzaService.getAll().subscribe(pizzaPageable => this.pizzaPageable = pizzaPageable);
   }
 
   private cleanPizza(): void {

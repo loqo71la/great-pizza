@@ -18,8 +18,8 @@ export class PizzaService {
     return this.http.get<Pageable<any>>(`${environment.api.url}/pizza`)
       .pipe(map(page => {
         page.items = page.items.map(item => {
-          const createdDate = item.createdDate ? new Date(item.createdDate): null;
-          const modifiedDate = item.modifiedDate ? new Date(item.modifiedDate): null;
+          const createdDate = item.createdDate ? new Date(item.createdDate) : null;
+          const modifiedDate = item.modifiedDate ? new Date(item.modifiedDate) : null;
           return {
             id: item.id,
             name: item.name,
@@ -36,6 +36,18 @@ export class PizzaService {
   }
 
   add(pizza: Pizza): Observable<Response> {
-    return this.http.post<Response>(`${environment.api.url}/pizza`, pizza);
+    return this.http.post<Response>(`${environment.api.url}/pizza`, { ...pizza, toppings: undefined });
+  }
+
+  delete(pizzaId: number): Observable<Response> {
+    return this.http.delete<Response>(`${environment.api.url}/pizza/${pizzaId}`);
+  }
+
+  update(pizza: Pizza): Observable<Response> {
+    return this.http.put<Response>(`${environment.api.url}/pizza/${pizza.id}`, { ...pizza, toppings: undefined });
+  }
+
+  assign(pizzaId: number, toppingIds: number[]): Observable<Response> {
+    return this.http.post<Response>(`${environment.api.url}/pizza/${pizzaId}/topping:assign`, { ids: toppingIds });
   }
 }

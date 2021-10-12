@@ -5,7 +5,7 @@
         (changedPage)="loadToppings($event)" *ngIf="toppingPageable"></gp-pagination>
 </ng-container>
 
-<gp-modal title="Add Topping" (saved)="add()">
+<gp-modal title="Add Topping" (success)="onSuccess()">
     <gp-name-input [(name)]="topping.name"></gp-name-input>
     <gp-price-input [(price)]="topping.price"></gp-price-input>
     <gp-selected-input [headers]="toppings" [(type)]="topping.type"></gp-selected-input>

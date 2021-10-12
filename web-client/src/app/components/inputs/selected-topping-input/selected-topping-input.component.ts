@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { ToppingService } from 'src/app/services/topping.service';
 import { Pageable } from 'src/app/shared/models/pageable';
 import { Selectable } from 'src/app/shared/models/selectable';
@@ -10,7 +10,7 @@ const itemPerPage = 4;
   templateUrl: './selected-topping-input.component.html',
   styleUrls: ['./selected-topping-input.component.css']
 })
-export class SelectedToppingInputComponent implements OnInit {
+export class SelectedToppingInputComponent implements OnChanges {
   @Output() toppingsChange = new EventEmitter<number[]>();
   @Input() toppings: number[];
 
@@ -19,16 +19,15 @@ export class SelectedToppingInputComponent implements OnInit {
 
   constructor(private toppingService: ToppingService) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.loadToppings();
   }
 
   selectTopping(index: number) {
     const selected = !this.items[index].selected;
     const id = this.toppingPageable.items[index].id
-    this.items[index].selected = selected;
     if (!selected) {
-      this.toppings.splice(id, 1);
+      this.toppings = this.toppings.filter(toppingId => toppingId !== id);
     } else if (!this.toppings.includes(id)) {
       this.toppings.push(id);
     }

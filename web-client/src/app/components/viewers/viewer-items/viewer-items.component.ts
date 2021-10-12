@@ -11,7 +11,7 @@ export class ViewerItemsComponent<T> {
   @Input() pageable: Pageable<T>;
   @Input() name: string;
 
-  doOpenModal(): void {
+  onOpenModal(): void {
     this.openModal.emit();
   }
 }

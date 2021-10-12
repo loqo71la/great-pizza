@@ -1,3 +1,7 @@
+p {
+    margin-bottom: 0px;
+}
+
 div.card-body {
     padding: 0.5rem 0.5rem;
 }
@@ -5,11 +9,22 @@ div.card-body {
 p.item-date {
     font-size: small;
     font-style: italic;
-    margin-bottom: 0px;
 }
 
-.item-price {
-    color: #7E7E7E;
-    font-size: 1.5rem;
+.subTotal-badge {
+    background-color: var(--gp-text-secondary);
+    color: var(--gp-text-dark);
+    padding: 0px 9px 2px 9px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+}
+
+.total-price {
+    font-size: 1.85rem;
     margin-right: 1rem;
+}
+
+.pizza-price {
+    font-size: 0.85rem;
+    padding: 0px 7px
 }

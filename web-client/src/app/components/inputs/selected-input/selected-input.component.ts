@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Selectable } from 'src/app/shared/models/selectable';
 
 @Component({
@@ -6,13 +6,13 @@ import { Selectable } from 'src/app/shared/models/selectable';
   templateUrl: './selected-input.component.html',
   styleUrls: ['./selected-input.component.css']
 })
-export class SelectedInputComponent implements OnInit {
+export class SelectedInputComponent implements OnChanges {
   @Output() typeChange = new EventEmitter<string>();
   @Input() headers: string[];
   @Input() type: string;
   items: Selectable[];
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.items = this.headers.map(header => ({ id: header, selected: this.type === header }));
   }
 

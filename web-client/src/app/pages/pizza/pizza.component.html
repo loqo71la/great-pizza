@@ -5,7 +5,7 @@
         (changedPage)="loadPizzas($event)" *ngIf="pizzaPageable"></gp-pagination>
 </ng-container>
 
-<gp-modal title="Add Pizza" (saved)="add()">
+<gp-modal title="Add Pizza" (success)="onSuccess()">
     <gp-name-input [(name)]="pizza.name"></gp-name-input>
     <gp-price-input [(price)]="pizza.price"></gp-price-input>
     <gp-selected-input [headers]="pizzas" [(type)]="pizza.type"></gp-selected-input>

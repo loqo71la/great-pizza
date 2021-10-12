@@ -41,18 +41,15 @@ export class ToppingComponent implements OnInit {
 
   }
 
-  add() {
-    this.toppingService.add(this.topping)
-      .subscribe(
-        _ => {
-          this.modal.hide();
-          this.loadToppings();
-        }, response => {
-          this.errorResponse = response.error;
-          console.log(this.errorResponse.message);
-        }
-      );
+  onSuccess() {
+    const success = response => {
+      this.modal.hide();
+      this.loadToppings();
+    };
+    const error = response => console.log(response.error.message);
 
+    if (this.topping.id) this.toppingService.update(this.topping).subscribe(success, error);
+    else this.toppingService.add(this.topping).subscribe(success, error)
   }
 
   private loadToppings() {

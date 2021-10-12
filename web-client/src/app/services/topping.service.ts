@@ -37,4 +37,8 @@ export class ToppingService {
   add(topping: Topping): Observable<Response> {
     return this.http.post<Response>(`${environment.api.url}/topping`, topping);
   }
+
+  update(topping: Topping): Observable<Response> {
+    return this.http.put<Response>(`${environment.api.url}/topping/${topping.id}`, topping);
+  }
 }

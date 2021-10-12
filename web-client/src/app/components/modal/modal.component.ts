@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
-  @Output() saved = new EventEmitter<boolean>();
+  @Output() success = new EventEmitter<boolean>();
   @Input() title: string;
 
   constructor() { }
@@ -14,7 +14,7 @@ export class ModalComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  success(): void {
-    this.saved.emit();
+  onSuccess(): void {
+    this.success.emit();
   }
 }
