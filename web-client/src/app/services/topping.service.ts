@@ -41,4 +41,8 @@ export class ToppingService {
   update(topping: Topping): Observable<Response> {
     return this.http.put<Response>(`${environment.api.url}/topping/${topping.id}`, topping);
   }
+
+  delete(toppingId: number): Observable<Response> {
+    return this.http.delete<Response>(`${environment.api.url}/topping/${toppingId}`);
+  }
 }

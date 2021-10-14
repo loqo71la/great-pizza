@@ -8,3 +8,10 @@
     width: 30px !important;
     height: 30px !important;
 }
+
+.alert-danger {
+    border-radius: .25rem;
+    margin-bottom: 0px;
+    margin-top: 1rem;
+    padding: .5rem;
+}

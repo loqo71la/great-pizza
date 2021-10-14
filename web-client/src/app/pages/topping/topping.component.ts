@@ -7,7 +7,7 @@ import { Topping } from 'src/app/shared/models/topping';
 import { Pageable } from 'src/app/shared/models/pageable';
 import { Selectable } from 'src/app/shared/models/selectable';
 
-const DefaultToppings = ['tp1', 'tp2', 'tp3', 'tp4', 'tp5', 'tp6', 'tp6', 'tp7', 'tp8', 'tp9', 'tp10', 'tp11', 'tp12'];
+const DefaultToppings = ['tp1', 'tp2', 'tp3', 'tp4', 'tp5', 'tp6', 'tp7', 'tp8', 'tp9', 'tp10', 'tp11', 'tp12'];
 @Component({
   selector: 'gp-topping',
   templateUrl: './topping.component.html',
@@ -19,6 +19,7 @@ export class ToppingComponent implements OnInit {
   errorResponse: Response;
   toppings: string[];
   topping: Topping;
+  error: string;
   modal: Modal;
 
   constructor(private toppingService: ToppingService) {
@@ -37,16 +38,33 @@ export class ToppingComponent implements OnInit {
     this.modal.show();
   }
 
-  onAction(type: any) {
+  onActions(value: any) {
+    const current = this.toppingPageable.items[value.index];
+    if (value.action === 'edit') {
+      this.topping = { ...current };
+      this.modal.show();
+    }
 
+    if (value.action === 'delete') {
+      var response = confirm(`Are you sure you want to delete "${current.name}"`);
+      if (response) this.toppingService.delete(current.id).subscribe(_ => this.loadToppings());
+    }
   }
 
   onSuccess() {
-    const success = response => {
+    const success = _ => {
       this.modal.hide();
       this.loadToppings();
     };
-    const error = response => console.log(response.error.message);
+    const error = response => {
+      this.error = response.error.message;
+      console.log(response.error.message);
+    }
+
+    if (!this.topping.name) {
+      this.error = 'Topping name can\'t be empty';
+      return;
+    }
 
     if (this.topping.id) this.toppingService.update(this.topping).subscribe(success, error);
     else this.toppingService.add(this.topping).subscribe(success, error)

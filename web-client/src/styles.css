@@ -2,16 +2,16 @@
     --gp-text-primary: #24292e;
     --gp-text-secondary: #717880;
     --gp-text-dark: #ffffff;
-    --gp-text-subtitle: #ffe600;
     --gp-bg-primary: #f4f8ff;
     --gp-bg-header: #001950;
-    --gp-bg-header-action: #003c8b;
-    --gp-bg-header-card: #01a2ec;
-    --gp-bg-btn-main: #00aeff;
-    --gp-bg-btn-main-hover: #01a2ec;
+    --gp-bg-button-card: #00c3ff;
+    --gp-bg-button-card-hover: #1cb7ffb0;
+    --gp-bg-select-item: #e9ecef;
+    --gp-bg-btn-main: #009de6;
+    --gp-bg-btn-main-hover: #00aeffce;
     --gp-bg-btn: #ffffff;
     --gp-bg-btn-hover: #f8f9fa;
-    --gp-bg-input: #ffe600;
+    --gp-border-select-item: #ced4da;
     --gp-border: #ced4da;
 }
 
@@ -20,32 +20,6 @@ html, body {
     background-color: var(--gp-bg-primary) !important;
     color: var(--gp-text-primary) !important;
     font-weight: 300;
-}
-
-.btn-circle {
-    width: 40px;
-    max-width: 40px;
-    min-width: 40px;
-    border-radius: 50%;
-}
-
-.btn-white {
-    background-color: var(--gp-bg-btn);
-    color: var(--gp-text-primary);
-}
-
-.btn-white:hover {
-    background-color: var(--gp-bg-btn-hover);
-}
-
-.btn-main {
-    background-color: var(--gp-bg-btn-main) !important;
-    color: white !important;
-}
-
-.btn-main:hover {
-    background-color: var(--gp-bg-btn-main-hover);
-    color: white;
 }
 
 .pz1, .pz2, .pz3, .pz4 {

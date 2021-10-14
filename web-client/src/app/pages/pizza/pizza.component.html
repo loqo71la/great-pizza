@@ -8,6 +8,9 @@
 <gp-modal title="Add Pizza" (success)="onSuccess()">
     <gp-name-input [(name)]="pizza.name"></gp-name-input>
     <gp-price-input [(price)]="pizza.price"></gp-price-input>
+
     <gp-selected-input [headers]="pizzas" [(type)]="pizza.type"></gp-selected-input>
+    <gp-size-input [(size)]="pizza.size"></gp-size-input>
     <gp-selected-topping-input [(toppings)]="pizza.toppings"></gp-selected-topping-input>
+    <p class="alert-danger" *ngIf="error">{{error}}</p>
 </gp-modal>

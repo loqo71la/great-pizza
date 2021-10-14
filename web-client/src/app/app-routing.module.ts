@@ -16,6 +16,7 @@ import { ViewerPageComponent } from './components/viewers/viewer-page/viewer-pag
 import { SelectedInputComponent } from './components/inputs/selected-input/selected-input.component';
 import { SelectedToppingInputComponent } from './components/inputs/selected-topping-input/selected-topping-input.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { SizeInputComponent } from './components/inputs/size-input/size-input.component';
 
 const routes: Routes = [
   {
@@ -49,7 +50,8 @@ const routes: Routes = [
     SelectedInputComponent,
     ViewerPageComponent,
     SelectedToppingInputComponent,
-    ModalComponent
+    ModalComponent,
+    SizeInputComponent
   ]
 })
 export class AppRoutingModule { }

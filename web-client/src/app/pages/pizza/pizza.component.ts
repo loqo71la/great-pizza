@@ -15,6 +15,7 @@ const DefaultPizzas = ['pz1', 'pz2', 'pz3', 'pz4'];
 export class PizzaComponent implements OnInit {
   pizzaPageable: Pageable<Pizza>;
   pizzas: string[];
+  error: string;
   modal: Modal;
   pizza: Pizza;
   name: string;
@@ -38,7 +39,7 @@ export class PizzaComponent implements OnInit {
   onActions(value: any) {
     const current = this.pizzaPageable.items[value.index];
     if (value.action === 'edit') {
-      this.pizza = { ...current, toppings: current.toppings.map((topping: any) => topping.id) }
+      this.pizza = { ...current, toppings: current.toppings.map((topping: any) => topping.id) };
       this.modal.show();
     }
 
@@ -55,7 +56,16 @@ export class PizzaComponent implements OnInit {
           subscribe(_ => this.closeModal());
       } else this.closeModal();
     };
-    const error = response => console.log(response.error.message);
+    const error = response => {
+      this.error = response.error.message;
+      console.log(response.error.message);
+    }
+
+    if (!this.pizza.name) {
+      this.error = 'Pizza name can\'t be empty';
+      return;
+    }
+
     if (this.pizza.id) this.pizzaService.update(this.pizza).subscribe(success, error);
     else this.pizzaService.add(this.pizza).subscribe(success, error);
   }
@@ -77,5 +87,6 @@ export class PizzaComponent implements OnInit {
 
   private cleanPizza(): void {
     this.pizza = { id: 0, name: '', type: this.pizzas[0], size: '', price: 0, toppings: [] };
+    this.error = '';
   }
 }

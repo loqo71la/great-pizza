@@ -13,4 +13,8 @@ export class PriceInputComponent {
     this.price = price;
     this.priceChange.emit(this.price);
   }
+
+  onBlur(): void {
+    if (this.price == null) this.price = 0;
+  }
 }

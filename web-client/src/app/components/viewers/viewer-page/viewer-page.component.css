@@ -2,6 +2,10 @@ p {
     margin-bottom: 0px;
 }
 
+sup {
+    font-size: .65rem;
+}
+
 div.card-body {
     padding: 0.5rem 0.5rem;
 }
@@ -11,10 +15,39 @@ p.item-date {
     font-style: italic;
 }
 
+button {
+    width: 36px;
+    height: 36px;
+    padding: 2px;
+    border-color: var(--gp-border);
+    border-style: solid;
+    border-radius: 50%;
+    border-width: 1px;
+}
+
+.btn-white {
+    background-color: var(--gp-bg-btn);
+    color: var(--gp-text-secondary);
+}
+
+.btn-white:hover {
+    background-color: var(--gp-bg-btn-hover);
+}
+
+.btn-main {
+    background-color: var(--gp-bg-btn-main) !important;
+    color: white !important;
+}
+
+.btn-main:hover {
+    background-color: var(--gp-bg-btn-main-hover) !important;
+    color: white;
+}
+
 .subTotal-badge {
     background-color: var(--gp-text-secondary);
     color: var(--gp-text-dark);
-    padding: 0px 9px 2px 9px;
+    padding: 0px 9px 2px 7px;
     border-radius: 50px;
     font-size: 0.8rem;
 }

@@ -9,4 +9,5 @@
     <gp-name-input [(name)]="topping.name"></gp-name-input>
     <gp-price-input [(price)]="topping.price"></gp-price-input>
     <gp-selected-input [headers]="toppings" [(type)]="topping.type"></gp-selected-input>
+    <p class="alert-danger" *ngIf="error">{{error}}</p>
 </gp-modal>

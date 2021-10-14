@@ -1,0 +1,12 @@
+.container-item {
+    background-color: var(--gp-bg-select-item);
+    border-color: var(--gp-border);
+    border-style: solid;
+    border-radius: 10%;
+    border-width: 1px;
+    padding: 2px 0px;
+}
+
+i.bi {
+    color: var(--gp-bg-button-card);
+}

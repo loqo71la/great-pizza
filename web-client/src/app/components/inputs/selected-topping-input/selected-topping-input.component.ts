@@ -27,7 +27,8 @@ export class SelectedToppingInputComponent implements OnChanges {
     const selected = !this.items[index].selected;
     const id = this.toppingPageable.items[index].id
     if (!selected) {
-      this.toppings = this.toppings.filter(toppingId => toppingId !== id);
+      const index = this.toppings.indexOf(id);
+      this.toppings.splice(index, 1);
     } else if (!this.toppings.includes(id)) {
       this.toppings.push(id);
     }

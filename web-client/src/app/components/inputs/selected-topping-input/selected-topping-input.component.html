@@ -1,15 +1,13 @@
-<div class="mb-2">
-    <label for="topping" class="form-label">Toppings</label>
-    <ol class="list-group mb-2">
-        <li class="btn list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-            *ngFor="let item of items; let i = index" (click)="selectTopping(i)">
-            <div class="rounded" [ngClass]="item.id"></div>
-            <div class="ms-3 flex-grow-1">{{item.name}}</div>
-            <span>
-                <i class="bi" [ngClass]="{'bi-check-circle-fill': item.selected, 'bi-circle': !item.selected}"></i>
-            </span>
-        </li>
-    </ol>
-    <gp-pagination [currentPage]="toppingPageable.currentPage" [totalPages]="toppingPageable.totalPages"
-        (changedPage)="loadToppings($event)" *ngIf="toppingPageable"></gp-pagination>
-</div>
+<label for="topping" class="form-label">Toppings</label>
+<ol class="list-group mb-2">
+    <li class="btn list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        *ngFor="let item of items; let i = index" (click)="selectTopping(i)">
+        <div class="rounded" [ngClass]="item.id"></div>
+        <div class="ms-3 flex-grow-1">{{item.name}}</div>
+        <span>
+            <i class="bi" [ngClass]="{'bi-check-circle-fill': item.selected, 'bi-circle': !item.selected}"></i>
+        </span>
+    </li>
+</ol>
+<gp-pagination [currentPage]="toppingPageable.currentPage" [totalPages]="toppingPageable.totalPages"
+    (changedPage)="loadToppings($event)" *ngIf="toppingPageable"></gp-pagination>

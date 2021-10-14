@@ -16,15 +16,21 @@ const DefaultMenus = [
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   menus: Menu[];
 
   constructor(private router: Router) {
     this.menus = DefaultMenus;
-    router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
-        this.menus.forEach(menu => menu.selected = menu.url === val.url);
-      }
+  }
+
+  ngOnInit() {
+    this.loadMenu(this.router.url);
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) this.loadMenu(val.url);
     });
+  }
+
+  private loadMenu(url: string) {
+    this.menus.forEach(menu => menu.selected = menu.url === url)
   }
 }

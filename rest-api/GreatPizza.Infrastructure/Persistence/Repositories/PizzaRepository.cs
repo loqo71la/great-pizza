@@ -28,7 +28,6 @@ namespace GreatPizza.Infrastructure.Persistence.Repositories
         {
             return await _gpContext.Pizzas
                 .Include(pizza => pizza.Toppings)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(predicate);
         }
 
@@ -59,7 +58,6 @@ namespace GreatPizza.Infrastructure.Persistence.Repositories
         {
             IQueryable<Pizza> queryable = _gpContext.Pizzas
                 .Include(pizza => pizza.Toppings)
-                .AsNoTracking()
                 .Where(predicate)
                 .OrderByDescending(pizza => pizza.CreatedDate);
             if (pageable != null)

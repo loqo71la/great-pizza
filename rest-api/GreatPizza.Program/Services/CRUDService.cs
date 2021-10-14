@@ -41,10 +41,10 @@ namespace GreatPizza.Program.Services
             {
                 throw new NotFoundException(typeof(T), id);
             }
-            entity.Id = id;
-            entity.ModifiedDate = DateTime.Now;
-            entity.CreatedDate = savedEntity.CreatedDate;
-            await _repository.Update(entity);
+
+            Update(savedEntity, entity);
+            savedEntity.ModifiedDate = DateTime.Now;
+            await _repository.Update(savedEntity);
         }
 
         public virtual async Task Remove(int id)
@@ -66,5 +66,7 @@ namespace GreatPizza.Program.Services
         {
             return _repository.Count();
         }
+
+        protected abstract void Update(T entity, T newEntity);
     }
 }
