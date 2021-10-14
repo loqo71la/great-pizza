@@ -11,8 +11,8 @@ namespace GreatPizza.Program.Services
     {
         private readonly IToppingRepository _toppingRepository;
 
-        public PizzaService(IPizzaRepository pizzaRepository, IToppingRepository toppingRepository) : base(
-            pizzaRepository)
+        public PizzaService(IPizzaRepository pizzaRepository, IToppingRepository toppingRepository) :
+            base(pizzaRepository)
         {
             _toppingRepository = toppingRepository;
         }

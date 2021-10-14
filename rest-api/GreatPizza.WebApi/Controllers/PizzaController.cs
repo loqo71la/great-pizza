@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using GreatPizza.Domain.Entities;
 using GreatPizza.Program.Interfaces;
-using GreatPizza.Program.Services;
 using GreatPizza.WebApi.DTOs;
 using GreatPizza.WebApi.Mappers;
 using Microsoft.AspNetCore.Http;

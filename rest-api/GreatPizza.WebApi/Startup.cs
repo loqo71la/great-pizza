@@ -28,8 +28,8 @@ namespace GreatPizza.WebApi
             {
                 config.SwaggerDoc("v1", new OpenApiInfo {Title = "Great Pizza", Version = "v1"});
             });
-            services.AddScoped<ToppingMapper>();
-            services.AddScoped<PizzaMapper>();
+            services.AddSingleton<ToppingMapper>();
+            services.AddSingleton<PizzaMapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
