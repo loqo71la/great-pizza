@@ -1,6 +1,7 @@
 # REST API
 /rest-api/.idea
 /rest-api/.vscode
+/rest-api/.vs
 
 /rest-api/*.suo
 /rest-api/*.user

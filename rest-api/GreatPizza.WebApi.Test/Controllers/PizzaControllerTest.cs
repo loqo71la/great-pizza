@@ -42,7 +42,7 @@ namespace GreatPizza.WebApi.Test.Controllers
 
         public static IEnumerable<object[]> PizzaScenario()
         {
-            var pizzas = new[] {new Pizza {Id = 1}, new Pizza {Id = 2}, new Pizza {Id = 3}};
+            var pizzas = new[] { new Pizza { Id = 1 }, new Pizza { Id = 2 }, new Pizza { Id = 3 } };
             var emptyPizzas = Array.Empty<Pizza>();
             return new List<object[]>
             {
@@ -124,7 +124,7 @@ namespace GreatPizza.WebApi.Test.Controllers
                 Price = 12.95m,
                 Size = "L",
                 CreatedDate = new DateTime(2021, 7, 7, 0, 0, 0, DateTimeKind.Utc),
-                Toppings = new[] {new Topping {Id = 1}, new Topping {Id = 2}}
+                Toppings = new[] { new Topping { Id = 1 }, new Topping { Id = 2 } }
             };
             _mockPizzaRepository.Setup(repository => repository.Get(1))
                 .ReturnsAsync(pizza);
@@ -183,7 +183,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             var payload = "{\"name\":\"Hawaiian\",\"size\":\"L\",\"price\":12.95}";
             var body = new StringContent(payload, Encoding.UTF8, "application/json");
             _mockPizzaRepository.Setup(repository => repository.GetWhere(It.IsAny<Expression<Func<Pizza, bool>>>()))
-                .ReturnsAsync(new Pizza {Id = 1});
+                .ReturnsAsync(new Pizza { Id = 1 });
 
             // Act
             var response = await _client.PostAsync("/api/pizza", body);
@@ -232,7 +232,7 @@ namespace GreatPizza.WebApi.Test.Controllers
             var payload = "{\"name\":\"Hawaiian\",\"size\":\"L\",\"price\":12.95}";
             var body = new StringContent(payload, Encoding.UTF8, "application/json");
             _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .ReturnsAsync(new Pizza {Id = 1});
+                .ReturnsAsync(new Pizza { Id = 1 });
             _mockPizzaRepository.Setup(repository => repository.Update(It.IsAny<Pizza>()))
                 .Returns(Task.CompletedTask);
 
@@ -280,7 +280,7 @@ namespace GreatPizza.WebApi.Test.Controllers
         {
             // Arrange
             _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .ReturnsAsync(new Pizza {Id = 1});
+                .ReturnsAsync(new Pizza { Id = 1 });
             _mockPizzaRepository.Setup(repository => repository.Remove(It.IsAny<Pizza>()))
                 .Returns(Task.CompletedTask);
 
@@ -304,7 +304,7 @@ namespace GreatPizza.WebApi.Test.Controllers
         public async Task Post_AssignToppingWhenPizzaDoesNotExist_ReturnsErrorResponse()
         {
             // Arrange
-            var body = new StringContent("{\"id\":3}", Encoding.UTF8, "application/json");
+            var body = new StringContent("{\"ids\":[3]}", Encoding.UTF8, "application/json");
             _mockPizzaRepository.Setup(repository => repository.Get(1)).Returns(null);
 
             // Act
@@ -327,11 +327,11 @@ namespace GreatPizza.WebApi.Test.Controllers
         public async Task Post_AssignNotFoundTopping_ReturnsErrorResponse()
         {
             // Arrange
-            var body = new StringContent("{\"id\":3}", Encoding.UTF8, "application/json");
+            var body = new StringContent("{\"ids\":[3,7]}", Encoding.UTF8, "application/json");
             _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .ReturnsAsync(new Pizza {Id = 1, Toppings = Array.Empty<Topping>()});
-            _mockToppingRepository.Setup(repository => repository.Get(3))
-                .Returns(null);
+                .ReturnsAsync(new Pizza { Id = 1, Toppings = Array.Empty<Topping>() });
+            _mockToppingRepository.Setup(repository => repository.GetAllWhere(It.IsAny<Expression<Func<Topping, bool>>>(), null))
+                .ReturnsAsync(new Topping[] { new Topping { Id = 3 } });
 
             // Act
             var response = await _client.PostAsync("/api/pizza/1/topping:assign", body);
@@ -343,9 +343,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
             Assert.Equal("Error", responseDto.Status);
-            Assert.Equal("Topping with ID [3] was not found.", responseDto.Message);
+            Assert.Equal("Toppings with IDs [7] were not found.", responseDto.Message);
             _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
-            _mockToppingRepository.Verify(repository => repository.Get(3), Times.Once);
+            _mockToppingRepository.Verify(repository => repository.GetAllWhere(It.IsAny<Expression<Func<Topping, bool>>>(), null), Times.Once);
             _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Never);
         }
 
@@ -353,11 +353,11 @@ namespace GreatPizza.WebApi.Test.Controllers
         public async Task Post_AssignToppingWhenPizzaExist_ReturnsAssignedResponse()
         {
             // Arrange
-            var body = new StringContent("{\"id\":3}", Encoding.UTF8, "application/json");
+            var body = new StringContent("{\"ids\":[3,7]}", Encoding.UTF8, "application/json");
             _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .ReturnsAsync(new Pizza {Id = 1, Toppings = Array.Empty<Topping>()});
-            _mockToppingRepository.Setup(repository => repository.Get(3))
-                .ReturnsAsync(new Topping {Id = 3});
+                .ReturnsAsync(new Pizza { Id = 1, Toppings = Array.Empty<Topping>() });
+            _mockToppingRepository.Setup(repository => repository.GetAllWhere(It.IsAny<Expression<Func<Topping, bool>>>(), null))
+                .ReturnsAsync(new Topping[] { new Topping { Id = 3 }, new Topping { Id = 7 } });
 
             // Act
             var response = await _client.PostAsync("/api/pizza/1/topping:assign", body);
@@ -370,77 +370,9 @@ namespace GreatPizza.WebApi.Test.Controllers
             Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
             Assert.Equal("Success", responseDto.Status);
-            Assert.Equal("Topping with ID [3] was successfully assigned.", responseDto.Message);
+            Assert.Equal("Toppings with IDs [3,7] were successfully assigned.", responseDto.Message);
             _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
-            _mockToppingRepository.Verify(repository => repository.Get(3), Times.Once);
-            _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
-        }
-
-        [Fact]
-        public async Task Delete_AssignedToppingWhenPizzaDoesNotExist_ReturnsErrorResponse()
-        {
-            // Arrange
-            _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .Returns(null);
-
-            // Act
-            var response = await _client.DeleteAsync("/api/pizza/1/topping/3");
-            var content = await response.Content.ReadAsStringAsync();
-            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-            Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-
-            Assert.Equal("Error", responseDto.Status);
-            Assert.Equal("Pizza with ID [1] was not found.", responseDto.Message);
-            _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
-            _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Never);
-        }
-
-        [Fact]
-        public async Task Delete_AssignedToppingWhenPizzaExist_ReturnsDeletedResponse()
-        {
-            // Arrange
-            _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .ReturnsAsync(new Pizza {Id = 1, Toppings = new[] {new Topping {Id = 3}}});
-
-            // Act
-            var response = await _client.DeleteAsync("/api/pizza/1/topping/3");
-            var content = await response.Content.ReadAsStringAsync();
-            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
-
-            // Assert
-            response.EnsureSuccessStatusCode();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-
-            Assert.Equal("Success", responseDto.Status);
-            Assert.Equal("Topping with ID [3] was successfully unassigned.", responseDto.Message);
-            _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
-            _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
-        }
-
-        [Fact]
-        public async Task Delete_UnassignedToppingWhenPizzaExist_ReturnsDeletedResponse()
-        {
-            // Arrange
-            _mockPizzaRepository.Setup(repository => repository.Get(1))
-                .ReturnsAsync(new Pizza {Id = 1, Toppings = Array.Empty<Topping>()});
-
-            // Act
-            var response = await _client.DeleteAsync("/api/pizza/1/topping/15");
-            var content = await response.Content.ReadAsStringAsync();
-            var responseDto = JsonSerializer.Deserialize<ResponseDTO>(content);
-
-            // Assert
-            response.EnsureSuccessStatusCode();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-
-            Assert.Equal("Success", responseDto.Status);
-            Assert.Equal("Topping with ID [15] was successfully unassigned.", responseDto.Message);
-            _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
+            _mockToppingRepository.Verify(repository => repository.GetAllWhere(It.IsAny<Expression<Func<Topping, bool>>>(), null), Times.Once);
             _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
         }
     }

@@ -24,6 +24,13 @@ namespace GreatPizza.WebApi
         {
             services.AddControllers();
             services.AddServices();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new OpenApiInfo {Title = "Great Pizza", Version = "v1"});
@@ -43,6 +50,7 @@ namespace GreatPizza.WebApi
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors();
             app.UseAuthorization();
             app.UseMiddleware<ExceptionHandler>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
