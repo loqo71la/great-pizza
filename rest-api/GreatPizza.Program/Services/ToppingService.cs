@@ -21,5 +21,12 @@ namespace GreatPizza.Program.Services
             }
             await base.Add(newTopping);
         }
+
+        protected override void Update(Topping topping, Topping newTopping)
+        {
+            topping.Name = newTopping.Name;
+            topping.Type = newTopping.Type;
+            topping.Price = newTopping.Price;
+        }
     }
 }

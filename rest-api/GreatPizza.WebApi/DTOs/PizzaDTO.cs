@@ -9,7 +9,7 @@ namespace GreatPizza.WebApi.DTOs
         [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("Name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         [JsonPropertyName("size")]
@@ -17,6 +17,9 @@ namespace GreatPizza.WebApi.DTOs
 
         [JsonPropertyName("price")]
         public decimal Price { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
 
         [JsonPropertyName("createdDate")]
         public string CreatedDate { get; set; }
