@@ -1,14 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatPizza.Domain", "GreatPizza.Domain\GreatPizza.Domain.csproj", "{14638F89-0565-4856-8199-574E483B7A28}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreatPizza.Domain", "GreatPizza.Domain\GreatPizza.Domain.csproj", "{14638F89-0565-4856-8199-574E483B7A28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatPizza.WebApi", "GreatPizza.WebApi\GreatPizza.WebApi.csproj", "{C427DCB3-A490-43B2-BEE8-D9AC1EF94976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreatPizza.WebApi", "GreatPizza.WebApi\GreatPizza.WebApi.csproj", "{C427DCB3-A490-43B2-BEE8-D9AC1EF94976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatPizza.WebApi.Test", "GreatPizza.WebApi.Test\GreatPizza.WebApi.Test.csproj", "{DBA26181-8C19-43F2-B2F7-30ABC3ABC40F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreatPizza.WebApi.Test", "GreatPizza.WebApi.Test\GreatPizza.WebApi.Test.csproj", "{DBA26181-8C19-43F2-B2F7-30ABC3ABC40F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatPizza.Program", "GreatPizza.Program\GreatPizza.Program.csproj", "{6A22BFE1-9FDC-4DB5-846A-23E8E76B9E3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreatPizza.Program", "GreatPizza.Program\GreatPizza.Program.csproj", "{6A22BFE1-9FDC-4DB5-846A-23E8E76B9E3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatPizza.Infrastructure", "GreatPizza.Infrastructure\GreatPizza.Infrastructure.csproj", "{7E93C3B8-934D-4002-819B-96F119878EDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreatPizza.Infrastructure", "GreatPizza.Infrastructure\GreatPizza.Infrastructure.csproj", "{7E93C3B8-934D-4002-819B-96F119878EDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreatPizza.Infrastructure.Migration", "GreatPizza.Infrastructure.Migration\GreatPizza.Infrastructure.Migration.csproj", "{5B0D7996-E5D6-4F0D-8EC7-18DC9E43639D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +41,15 @@ Global
 		{7E93C3B8-934D-4002-819B-96F119878EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E93C3B8-934D-4002-819B-96F119878EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E93C3B8-934D-4002-819B-96F119878EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B0D7996-E5D6-4F0D-8EC7-18DC9E43639D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B0D7996-E5D6-4F0D-8EC7-18DC9E43639D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B0D7996-E5D6-4F0D-8EC7-18DC9E43639D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B0D7996-E5D6-4F0D-8EC7-18DC9E43639D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FE24282-0AA2-4D21-970B-0BFC8F6792A5}
 	EndGlobalSection
 EndGlobal
