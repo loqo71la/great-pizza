@@ -1,5 +1,5 @@
 # Great Pizza
-This is an example application to manage a menu of pizzas and toppings.
+Application to manage a menu of pizzas and toppings using ASP.NET core and Angular.
 
 ## Prerequisites
 - [Docker](https://docs.docker.com/engine/install/)
