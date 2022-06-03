@@ -8,9 +8,9 @@ import { Selectable } from 'src/app/shared/models/selectable';
 })
 export class SelectedInputComponent implements OnChanges {
   @Output() typeChange = new EventEmitter<string>();
-  @Input() headers: string[];
-  @Input() type: string;
-  items: Selectable[];
+  @Input() headers!: string[];
+  @Input() type!: string;
+  items!: Selectable[];
 
   ngOnChanges(): void {
     this.items = this.headers.map(header => ({ id: header, selected: this.type === header }));

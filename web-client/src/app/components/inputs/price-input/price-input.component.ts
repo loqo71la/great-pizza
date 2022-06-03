@@ -7,11 +7,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class PriceInputComponent {
   @Output() priceChange = new EventEmitter<number>();
-  @Input() price: number;
+  @Input() price!: number;
 
   setPrice(price: number): void {
     this.price = price;
     this.priceChange.emit(this.price);
+  }
+
+  onFocus(event: any) {
+    event.target.select()
   }
 
   onBlur(): void {

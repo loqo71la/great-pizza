@@ -2,7 +2,7 @@
     <gp-viewer-items name="Toppings" [pageable]="toppingPageable" (openModal)="onOpenModal()"></gp-viewer-items>
     <gp-viewer-page [pageable]="toppingPageable" (actions)="onActions($event)"></gp-viewer-page>
     <gp-pagination [currentPage]="toppingPageable.currentPage" [totalPages]="toppingPageable.totalPages"
-        (changedPage)="loadToppings($event)" *ngIf="toppingPageable"></gp-pagination>
+        (changedPage)="loadToppings()" *ngIf="toppingPageable"></gp-pagination>
 </ng-container>
 
 <gp-modal title="Add Topping" (success)="onSuccess()">

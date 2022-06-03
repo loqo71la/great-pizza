@@ -8,8 +8,8 @@ import { Pageable } from 'src/app/shared/models/pageable';
 })
 export class ViewerItemsComponent<T> {
   @Output() openModal = new EventEmitter<any>();
-  @Input() pageable: Pageable<T>;
-  @Input() name: string;
+  @Input() pageable!: Pageable<T>;
+  @Input() name!: string;
 
   onOpenModal(): void {
     this.openModal.emit();

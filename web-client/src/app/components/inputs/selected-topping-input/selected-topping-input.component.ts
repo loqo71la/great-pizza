@@ -12,10 +12,10 @@ const itemPerPage = 4;
 })
 export class SelectedToppingInputComponent implements OnChanges {
   @Output() toppingsChange = new EventEmitter<number[]>();
-  @Input() toppings: number[];
+  @Input() toppings!: number[];
 
-  toppingPageable: Pageable<Topping>;
-  items: Selectable[];
+  toppingPageable!: Pageable<Topping>;
+  items!: Selectable[];
 
   constructor(private toppingService: ToppingService) { }
 

@@ -15,7 +15,7 @@ const DefaultSizes: Selectable[] = [
 })
 export class SizeInputComponent implements OnChanges {
   @Output() sizeChange = new EventEmitter<string>();
-  @Input() size: string;
+  @Input() size!: string;
   sizes: Selectable[];
 
   constructor() {

@@ -18,9 +18,9 @@ interface Page {
 })
 export class PaginationComponent implements OnInit {
   @Output() changedPage = new EventEmitter<number>();
-  @Input() currentPage: number;
-  @Input() totalPages: number;
-  pageList: Page[];
+  @Input() currentPage!: number;
+  @Input() totalPages!: number;
+  pageList!: Page[];
 
   ngOnInit(): void {
     this.pageList = [...Array(this.totalPages).keys()]
@@ -42,9 +42,5 @@ export class PaginationComponent implements OnInit {
 
   private isDisabled(direction: Direction): boolean {
     return this.totalPages == 1 || direction == Direction.Left ? this.currentPage == 1 : this.currentPage == this.totalPages;
-  }
-
-  private loadPage(value: string, direction: Direction) {
-    return { value, action: _ => this.movePage(direction), style: _ => this.loadStyle(direction) };
   }
 }

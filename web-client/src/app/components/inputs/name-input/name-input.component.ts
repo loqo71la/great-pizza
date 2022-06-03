@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class NameInputComponent {
   @Output() nameChange = new EventEmitter<string>();
-  @Input() name: string;
+  @Input() name!: string;
 
   setName(name: string): void {
     this.name = name;
