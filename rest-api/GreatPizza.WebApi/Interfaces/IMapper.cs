@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using GreatPizza.Domain.Entities;
+﻿using GreatPizza.Domain.Entities;
 using GreatPizza.WebApi.DTOs;
 
-namespace GreatPizza.WebApi.Interfaces
+namespace GreatPizza.WebApi.Interfaces;
+
+public interface IMapper<TD, TE> where TD : IDTO where TE : IEntity
 {
-    public interface IMapper<TD, TE> where TD : IDTO where TE : IEntity
-    {
-        TE ToEntity(TD dto);
+    TE ToEntity(TD dto);
 
-        TD ToDTO(TE entity);
+    TD ToDTO(TE entity);
 
-        PageDTO<TD> ToPageDTO(IEnumerable<TE> entities, string baseUrl, int page, int limit, int totalItem);
-    }
+    PageDTO<TD> ToPageDTO(IEnumerable<TE> entities, string baseUrl, int page, int limit, int totalItem);
 }
