@@ -13,11 +13,11 @@ const DefaultPizzas = ['pz1', 'pz2', 'pz3', 'pz4'];
   styleUrls: ['./pizza.component.css']
 })
 export class PizzaComponent implements OnInit {
-  pizzaPageable: Pageable<Pizza>;
+  pizzaPageable!: Pageable<Pizza>;
+  error!: string;
+  modal!: Modal;
+  pizza!: Pizza;
   pizzas: string[];
-  error: string;
-  modal: Modal;
-  pizza: Pizza;
   name: string;
 
   constructor(private pizzaService: PizzaService) {
@@ -28,18 +28,18 @@ export class PizzaComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPizzas();
-    this.modal = new Modal(document.getElementById('modal'));
+    this.modal = new Modal(document.getElementById('modal') as HTMLElement);
   }
 
   onOpenModal() {
     this.cleanPizza();
-    this.modal.show();
+    this.modal?.show();
   }
 
   onActions(value: any) {
     const current = this.pizzaPageable.items[value.index];
     if (value.action === 'edit') {
-      this.pizza = { ...current, toppings: current.toppings.map((topping: any) => topping.id) };
+      this.pizza = { ...current, toppings: current?.toppings.map((topping: any) => topping.id) };
       this.modal.show();
     }
 
@@ -50,13 +50,13 @@ export class PizzaComponent implements OnInit {
   }
 
   onSuccess(): void {
-    const success = response => {
+    const next = (response: any) => {
       if (this.pizza.toppings) {
         this.pizzaService.assign(this.loadPizzaId(response), this.pizza.toppings).
           subscribe(_ => this.closeModal());
       } else this.closeModal();
     };
-    const error = response => {
+    const error = (response: any) => {
       this.error = response.error.message;
       console.log(response.error.message);
     }
@@ -66,8 +66,12 @@ export class PizzaComponent implements OnInit {
       return;
     }
 
-    if (this.pizza.id) this.pizzaService.update(this.pizza).subscribe(success, error);
-    else this.pizzaService.add(this.pizza).subscribe(success, error);
+    if (this.pizza.id) this.pizzaService.update(this.pizza).subscribe({ next, error });
+    else this.pizzaService.add(this.pizza).subscribe({ next, error });
+  }
+
+  loadPizzas(): void {
+    this.pizzaService.getAll().subscribe(pizzaPageable => this.pizzaPageable = pizzaPageable);
   }
 
   private loadPizzaId(response: any): number {
@@ -79,10 +83,6 @@ export class PizzaComponent implements OnInit {
   private closeModal(): void {
     this.modal.hide();
     this.loadPizzas();
-  }
-
-  private loadPizzas(): void {
-    this.pizzaService.getAll().subscribe(pizzaPageable => this.pizzaPageable = pizzaPageable);
   }
 
   private cleanPizza(): void {

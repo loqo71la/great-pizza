@@ -14,13 +14,13 @@ const DefaultToppings = ['tp1', 'tp2', 'tp3', 'tp4', 'tp5', 'tp6', 'tp7', 'tp8',
   styleUrls: ['./topping.component.css']
 })
 export class ToppingComponent implements OnInit {
-  toppingPageable: Pageable<Topping>;
+  toppingPageable!: Pageable<Topping>;
   selectables: Selectable[];
-  errorResponse: Response;
+  errorResponse!: Response;
   toppings: string[];
-  topping: Topping;
-  error: string;
-  modal: Modal;
+  topping!: Topping;
+  error!: string;
+  modal!: Modal;
 
   constructor(private toppingService: ToppingService) {
     this.selectables = Array.from({ length: 12 }, (_, i) => ({ id: `tp${i + 1}`, selected: false }));
@@ -30,7 +30,7 @@ export class ToppingComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadToppings();
-    this.modal = new Modal(document.getElementById('modal'));
+    this.modal = new Modal(document.getElementById('modal') as HTMLElement);
   }
 
   onOpenModal() {
@@ -52,11 +52,11 @@ export class ToppingComponent implements OnInit {
   }
 
   onSuccess() {
-    const success = _ => {
+    const next = (_: any) => {
       this.modal.hide();
       this.loadToppings();
     };
-    const error = response => {
+    const error = (response: any) => {
       this.error = response.error.message;
       console.log(response.error.message);
     }
@@ -66,11 +66,11 @@ export class ToppingComponent implements OnInit {
       return;
     }
 
-    if (this.topping.id) this.toppingService.update(this.topping).subscribe(success, error);
-    else this.toppingService.add(this.topping).subscribe(success, error)
+    if (this.topping.id) this.toppingService.update(this.topping).subscribe({ next, error });
+    else this.toppingService.add(this.topping).subscribe({ next, error })
   }
 
-  private loadToppings() {
+  loadToppings() {
     this.toppingService.getAll().subscribe(toppingPage => this.toppingPageable = toppingPage);
   }
 

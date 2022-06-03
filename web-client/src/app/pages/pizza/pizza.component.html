@@ -2,7 +2,7 @@
     <gp-viewer-items name="Pizzas" [pageable]="pizzaPageable" (openModal)="onOpenModal()"></gp-viewer-items>
     <gp-viewer-page [pageable]="pizzaPageable" (actions)="onActions($event)"></gp-viewer-page>
     <gp-pagination [currentPage]="pizzaPageable.currentPage" [totalPages]="pizzaPageable.totalPages"
-        (changedPage)="loadPizzas($event)" *ngIf="pizzaPageable"></gp-pagination>
+        (changedPage)="loadPizzas()" *ngIf="pizzaPageable"></gp-pagination>
 </ng-container>
 
 <gp-modal title="Add Pizza" (success)="onSuccess()">
