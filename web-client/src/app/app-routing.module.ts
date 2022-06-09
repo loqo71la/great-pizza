@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
 import { PizzaComponent } from './pages/pizza/pizza.component';
 import { ToppingComponent } from './pages/topping/topping.component';
 import { HeaderComponent } from './components/header/header.component';
-import { HttpClientModule } from '@angular/common/http';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { ViewerItemsComponent } from './components/viewers/viewer-items/viewer-items.component';
 import { NameInputComponent } from './components/inputs/name-input/name-input.component';
@@ -17,6 +17,7 @@ import { SelectedInputComponent } from './components/inputs/selected-input/selec
 import { SelectedToppingInputComponent } from './components/inputs/selected-topping-input/selected-topping-input.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { SizeInputComponent } from './components/inputs/size-input/size-input.component';
+import { FormComponent } from './components/form/form.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,7 @@ const routes: Routes = [
     FormsModule,
     CommonModule,
     HttpClientModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(routes)
   ],
   exports: [RouterModule],
@@ -51,7 +53,8 @@ const routes: Routes = [
     ViewerPageComponent,
     SelectedToppingInputComponent,
     ModalComponent,
-    SizeInputComponent
+    SizeInputComponent,
+    FormComponent
   ]
 })
 export class AppRoutingModule { }

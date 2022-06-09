@@ -26,8 +26,8 @@ html, body {
     background-image: url('../src/assets/pizzas.png');
     background-repeat: no-repeat;
     background-position-y: 0px;
-    width: 80px;
-    height: 80px;
+    height: 82px;
+    width: 82px;
 }
 
 .pz1 {

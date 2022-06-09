@@ -1,0 +1,43 @@
+<pre>{{form.value | json }}</pre>
+<h1>Contact form</h1>
+<form (ngSubmit)="onSubmit()" [formGroup]="form" *ngIf="form">
+  <!-- <div class="mb-2" *ngFor="let field of fields">
+    <label [for]="field.name" class="form-label">{{field.label}}</label>
+    <ng-container [ngSwitch]="field.type">
+      <input *ngSwitchCase="'text'" type="text" [id]="field.name" class="form-control" [formControlName]="field.name">
+      <input *ngSwitchCase="'checkbox'" type="checkbox" class="form-check-input" [id]="field.name"
+        [formControlName]="field.name">
+      <input *ngSwitchCase="'number'" type="number" [id]="field.name" class="form-control"
+        [formControlName]="field.name">
+      <ng-container *ngSwitchCase="'radio'">
+        <input type="radio" class="btn-check" name="t" id="so" value="M" autocomplete="off" [formControlName]="field.name">
+        <label class="btn btn-outline-secondary" for="so"><i class="bi bi-google"></i></label>
+
+        <input type="radio" class="btn-check" name="t" id="do" value="S" autocomplete="off" [formControlName]="field.name">
+        <label class="btn btn-outline-secondary" for="do"><i class="bi bi-github"></i></label>
+      </ng-container>
+    </ng-container>
+    <div class="invalid-feedback">This field is required.</div>
+  </div> -->
+  <gp-select-single-input [items]="items" formControlName="size">
+  </gp-select-single-input>
+  <gp-card description="ninguna"></gp-card>
+
+  <!-- <div class="mb-4">
+    <label for="comment" class="form-label">Color</label>
+    <button [colorPicker]="form.get('skin')?.value" (colorPickerChange)="form.get('skin')?.setValue($event)"
+      type="button" class="btn" [style.background]="form.get('skin')?.value">
+      <span class="btn-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bootstrap-fill"
+          viewBox="0 0 20 20">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+        </svg>
+      </span>
+    </button> -->
+
+
+  <div class="d-grid gap-2 col-4 float-end">
+    <button type="submit" class="btn btn-info btn-lg" [disabled]="form.invalid">Send</button>
+  </div>
+</form>
