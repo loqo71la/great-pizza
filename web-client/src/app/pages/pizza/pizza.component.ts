@@ -27,8 +27,8 @@ export class PizzaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadPizzas();
-    this.modal = new Modal(document.getElementById('modal') as HTMLElement);
+    // this.loadPizzas();
+    // this.modal = new Modal(document.getElementById('modal') as HTMLElement);
   }
 
   onOpenModal() {
@@ -45,7 +45,7 @@ export class PizzaComponent implements OnInit {
 
     if (value.action === 'delete') {
       var response = confirm(`Are you sure you want to delete "${current.name}"`);
-      if (response) this.pizzaService.delete(current.id).subscribe(_ => this.loadPizzas());
+      if (response) this.pizzaService.delete(Number(current.id)).subscribe(_ => this.loadPizzas());
     }
   }
 
@@ -77,7 +77,7 @@ export class PizzaComponent implements OnInit {
   private loadPizzaId(response: any): number {
     if (this.pizza.id) return this.pizza.id;
     const match = response.message.match(/.+pizza\/(?<pizzaId>\d+)/);
-    return Number(match.groups['pizzaId'] || 0);
+    return match.groups['pizzaId'] || 0;
   }
 
   private closeModal(): void {
@@ -86,7 +86,7 @@ export class PizzaComponent implements OnInit {
   }
 
   private cleanPizza(): void {
-    this.pizza = { id: 0, name: '', type: this.pizzas[0], size: '', price: 0, toppings: [] };
+    this.pizza = { id: 0, name: '', size: '', type: this.pizzas[0], price: 0, toppings: [] };
     this.error = '';
   }
 }

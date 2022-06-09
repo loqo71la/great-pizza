@@ -1,10 +1,12 @@
 .container-item {
     background-color: var(--gp-bg-select-item);
     border-color: var(--gp-border);
+}
+
+button.btn {
+    padding: 0.25rem 0.35rem;
     border-style: solid;
-    border-radius: 10%;
-    border-width: 1px;
-    padding: 2px 0px;
+    border-radius: 15%;
 }
 
 i.bi {
