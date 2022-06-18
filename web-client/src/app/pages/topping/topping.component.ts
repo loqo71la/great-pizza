@@ -1,80 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal } from 'bootstrap';
+import { Router } from '@angular/router';
+import { catchError, Observable, of } from 'rxjs';
 
-import { ToppingService } from 'src/app/services/topping.service';
-import { Response } from 'src/app/shared/models/response';
-import { Topping } from 'src/app/shared/models/topping';
+import { environment } from 'src/environments/environment';
 import { Pageable } from 'src/app/shared/models/pageable';
-import { Selectable } from 'src/app/shared/models/selectable';
+import { ToppingService } from 'src/app/services/topping.service';
+import { Topping } from 'src/app/shared/models/topping';
 
-const DefaultToppings = ['tp1', 'tp2', 'tp3', 'tp4', 'tp5', 'tp6', 'tp7', 'tp8', 'tp9', 'tp10', 'tp11', 'tp12'];
 @Component({
   selector: 'gp-topping',
   templateUrl: './topping.component.html',
   styleUrls: ['./topping.component.css']
 })
 export class ToppingComponent implements OnInit {
-  toppingPageable!: Pageable<Topping>;
-  selectables: Selectable[];
-  errorResponse!: Response;
-  toppings: string[];
-  topping!: Topping;
-  error!: string;
-  modal!: Modal;
+  toppingPage!: Observable<Pageable<Topping>>;
 
-  constructor(private toppingService: ToppingService) {
-    this.selectables = Array.from({ length: 12 }, (_, i) => ({ id: `tp${i + 1}`, selected: false }));
-    this.toppings = DefaultToppings;
-    this.cleanTopping();
-  }
+  constructor(private toppingService: ToppingService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadToppings();
-    this.modal = new Modal(document.getElementById('modal') as HTMLElement);
   }
 
-  onOpenModal() {
-    this.cleanTopping();
-    this.modal.show();
+  loadToppings(page: number = 1) {
+    this.toppingPage = this.toppingService.getAll(page)
+      .pipe(catchError(response => {
+        alert(response.error.message ?? environment.api.error);
+        return of({ currentPage: 1, totalPages: 1, totalItems: 0, items: [] });
+      }));
   }
 
   onActions(value: any) {
-    const current = this.toppingPageable.items[value.index];
-    if (value.action === 'edit') {
-      this.topping = { ...current };
-      this.modal.show();
-    }
+    if (value.action === 'add') this.router.navigate(['toppings', 'create']);
+    if (value.action === 'edit') this.router.navigate(['toppings', value.item.id]);
 
     if (value.action === 'delete') {
-      var response = confirm(`Are you sure you want to delete "${current.name}"`);
-      if (response) this.toppingService.delete(current.id).subscribe(_ => this.loadToppings());
+      const response = confirm(`Are you sure you want to delete "${value.item.name}"`);
+      if (response) this.toppingService.delete(value.item.id).subscribe(_ => this.loadToppings());
     }
-  }
-
-  onSuccess() {
-    const next = (_: any) => {
-      this.modal.hide();
-      this.loadToppings();
-    };
-    const error = (response: any) => {
-      this.error = response.error.message;
-      console.log(response.error.message);
-    }
-
-    if (!this.topping.name) {
-      this.error = 'Topping name can\'t be empty';
-      return;
-    }
-
-    if (this.topping.id) this.toppingService.update(this.topping).subscribe({ next, error });
-    else this.toppingService.add(this.topping).subscribe({ next, error })
-  }
-
-  loadToppings() {
-    this.toppingService.getAll().subscribe(toppingPage => this.toppingPageable = toppingPage);
-  }
-
-  private cleanTopping() {
-    this.topping = { id: 0, name: '', type: this.toppings[0], price: 0 };
   }
 }

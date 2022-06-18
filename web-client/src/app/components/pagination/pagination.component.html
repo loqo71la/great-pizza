@@ -1,5 +1,17 @@
-<ul class="pagination pagination-sm justify-content-center">
-    <li class="page-item" [ngClass]="page.style(i)" *ngFor="let page of pageList; index as i;" (click)="page.action(i)">
-        <a class="btn page-link" [innerHTML]="page.value"></a>
+<nav>
+  <ul class="pagination">
+    <li class="page-item" [ngClass]="{'disabled': !hasLeft()}">
+      <a class="page-link" [routerLink]="[]" (click)="moveLeft()">&laquo;</a>
     </li>
-</ul>
+
+    <ng-container *ngFor="let page of pageList">
+      <li class="page-item" [ngClass]="{'active': page === currentPage}">
+        <a class="page-link" [routerLink]="[]" (click)="select(page)">{{page}}</a>
+      </li>
+    </ng-container>
+
+    <li class="page-item" [ngClass]="{'disabled': !hasRight()}">
+      <a class="page-link" [routerLink]="[]" (click)="moveRight()">&raquo;</a>
+    </li>
+  </ul>
+</nav>

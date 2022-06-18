@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal } from 'bootstrap';
+import { Router } from '@angular/router';
+import { catchError, Observable, of } from 'rxjs';
 
-import { PizzaService } from 'src/app/services/pizza.service';
+import { environment } from 'src/environments/environment';
 import { Pageable } from 'src/app/shared/models/pageable';
 import { Pizza } from 'src/app/shared/models/pizza';
-
-const DefaultPizzas = ['pz1', 'pz2', 'pz3', 'pz4'];
+import { PizzaService } from 'src/app/services/pizza.service';
 
 @Component({
   selector: 'gp-pizza',
@@ -13,80 +13,29 @@ const DefaultPizzas = ['pz1', 'pz2', 'pz3', 'pz4'];
   styleUrls: ['./pizza.component.css']
 })
 export class PizzaComponent implements OnInit {
-  pizzaPageable!: Pageable<Pizza>;
-  error!: string;
-  modal!: Modal;
-  pizza!: Pizza;
-  pizzas: string[];
-  name: string;
+  pizzaPage!: Observable<Pageable<Pizza>>;
 
-  constructor(private pizzaService: PizzaService) {
-    this.pizzas = DefaultPizzas;
-    this.name = 'Pizzas';
-    this.cleanPizza();
-  }
+  constructor(private pizzaService: PizzaService, private router: Router) { }
 
   ngOnInit(): void {
-    // this.loadPizzas();
-    // this.modal = new Modal(document.getElementById('modal') as HTMLElement);
-  }
-
-  onOpenModal() {
-    this.cleanPizza();
-    this.modal?.show();
-  }
-
-  onActions(value: any) {
-    const current = this.pizzaPageable.items[value.index];
-    if (value.action === 'edit') {
-      this.pizza = { ...current, toppings: current?.toppings.map((topping: any) => topping.id) };
-      this.modal.show();
-    }
-
-    if (value.action === 'delete') {
-      var response = confirm(`Are you sure you want to delete "${current.name}"`);
-      if (response) this.pizzaService.delete(Number(current.id)).subscribe(_ => this.loadPizzas());
-    }
-  }
-
-  onSuccess(): void {
-    const next = (response: any) => {
-      if (this.pizza.toppings) {
-        this.pizzaService.assign(this.loadPizzaId(response), this.pizza.toppings).
-          subscribe(_ => this.closeModal());
-      } else this.closeModal();
-    };
-    const error = (response: any) => {
-      this.error = response.error.message;
-      console.log(response.error.message);
-    }
-
-    if (!this.pizza.name) {
-      this.error = 'Pizza name can\'t be empty';
-      return;
-    }
-
-    if (this.pizza.id) this.pizzaService.update(this.pizza).subscribe({ next, error });
-    else this.pizzaService.add(this.pizza).subscribe({ next, error });
-  }
-
-  loadPizzas(): void {
-    this.pizzaService.getAll().subscribe(pizzaPageable => this.pizzaPageable = pizzaPageable);
-  }
-
-  private loadPizzaId(response: any): number {
-    if (this.pizza.id) return this.pizza.id;
-    const match = response.message.match(/.+pizza\/(?<pizzaId>\d+)/);
-    return match.groups['pizzaId'] || 0;
-  }
-
-  private closeModal(): void {
-    this.modal.hide();
     this.loadPizzas();
   }
 
-  private cleanPizza(): void {
-    this.pizza = { id: 0, name: '', size: '', type: this.pizzas[0], price: 0, toppings: [] };
-    this.error = '';
+  loadPizzas(page: number = 1): void {
+    this.pizzaPage = this.pizzaService.getAll(page)
+      .pipe(catchError(response => {
+        alert(response.error.message ?? environment.api.error);
+        return of({ currentPage: 1, totalPages: 1, totalItems: 0, items: [] });
+      }));
+  }
+
+  onActions(value: any) {
+    if (value.action === 'add') this.router.navigate(['pizzas', 'create']);
+    if (value.action === 'edit') this.router.navigate(['pizzas', value.item.id]);
+
+    if (value.action === 'delete') {
+      const response = confirm(`Are you sure you want to delete "${value.item.name}"`);
+      if (response) this.pizzaService.delete(value.item.id).subscribe(_ => this.loadPizzas());
+    }
   }
 }

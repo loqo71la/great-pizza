@@ -16,7 +16,7 @@ export class ViewerPageComponent {
   }
 
   loadSubTotal(item: any): number {
-      return item.toppings?.map((topping: any) => topping.price)
+    return item.toppings?.map((topping: any) => topping.price)
       .reduce((first: number, second: number) => first + second, 0) || 0;
   }
 
@@ -32,11 +32,11 @@ export class ViewerPageComponent {
     return pizza.modifiedDate ? pizza.modifiedDate : pizza.createdDate;
   }
 
-  edit(index: number): void {
-    this.actions.emit({ action: 'edit', index })
+  edit(item: any): void {
+    this.actions.emit({ action: 'edit', item })
   }
 
-  delete(index: number): void {
-    this.actions.emit({ action: 'delete', index })
+  delete(item: any): void {
+    this.actions.emit({ action: 'delete', item })
   }
 }

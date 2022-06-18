@@ -6,13 +6,15 @@
     --gp-bg-header: #001950;
     --gp-bg-button-card: #00c3ff;
     --gp-bg-button-card-hover: #1cb7ffb0;
-    --gp-bg-select-item: #e9ecef;
     --gp-bg-btn-main: #009de6;
     --gp-bg-btn-main-hover: #00aeffce;
     --gp-bg-btn: #ffffff;
     --gp-bg-btn-hover: #f8f9fa;
+    --gp-bg-select-item: #edf4fc;
+    --gp-bg-select-pressed-item: #ffffff;
     --gp-border-select-item: #ced4da;
     --gp-border: #ced4da;
+    --gp-border-loader: #00c3ff;
 }
 
 html, body {
@@ -84,4 +86,8 @@ html, body {
 
 .tp6, .tp12 {
     background-position-x: -250px;
+}
+
+span.input-group-text {
+    background-color: var(--gp-bg-select-item);
 }
