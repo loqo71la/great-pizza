@@ -7,11 +7,11 @@ import { Pageable } from 'src/app/shared/models/pageable';
   styleUrls: ['./viewer-items.component.css']
 })
 export class ViewerItemsComponent {
-  @Output() openModal = new EventEmitter<any>();
+  @Output() actions = new EventEmitter<any>();
   @Input() pageable!: Pageable<any>;
   @Input() name!: string;
 
-  onOpenModal(): void {
-    this.openModal.emit();
+  add(): void {
+    this.actions.emit({action: 'add'});
   }
 }

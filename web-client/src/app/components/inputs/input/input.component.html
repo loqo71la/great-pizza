@@ -1,0 +1,57 @@
+<div class="mt-2">
+  <label [for]="id">
+    {{label}}
+    <span *ngIf="control.errors?.['required']"> *</span>
+  </label>
+  <ng-container [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'text'">
+      <input type="text" [id]="id" [class]="style" autocomplete="off" spellcheck="false"
+        [formControl]="control">
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'price'">
+      <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input type="number" [id]="id" [class]="style" autocomplete="off" step="0.1"
+          [formControl]="control">
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'select-item'">
+      <gp-selected-input [items]="headers!" [itemTemplate]="item" [formControl]="control">
+        <ng-template let-item #item>
+          <div [ngClass]="item.value"></div>
+        </ng-template>
+      </gp-selected-input>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'select-size'">
+      <gp-selected-input [items]="headers!" [itemTemplate]="size" [formControl]="control">
+        <ng-template let-item #size>
+          <div class="size-text">{{item.value}}</div>
+        </ng-template>
+      </gp-selected-input>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'select-list'">
+      <gp-selected-input [items]="headers!" [itemTemplate]="list" [formControl]="control">
+        <ng-template let-item #list>
+          <div class="d-flex align-items-center">
+            <div [ngClass]="item.data.type"></div>
+            <div class="text-start ms-1">
+              <p class="m-0 fw-semibold text-truncate list-text">{{item.data.name}}</p>
+              <p class="m-0 fw-bolder"><small>${{item.data.price}}</small></p>
+            </div>
+          </div>
+        </ng-template>
+      </gp-selected-input>
+    </ng-container>
+  </ng-container>
+  
+  <span class="invalid-feedback" *ngIf="control.errors?.['minlength']">
+    Name must have at least {{ control.errors?.['minlength']?.requiredLength}} characters.
+  </span>
+  <span class="invalid-feedback" *ngIf="control.errors?.['required']">
+    Please provide a valid name.
+  </span>
+</div>

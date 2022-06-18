@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-
-interface Menu {
-  url: string;
-  name: string;
-  selected: boolean;
-}
+import { Menu } from 'src/app/shared/models/menu';
 
 const DefaultMenus = [
   { url: '/pizzas', name: 'Pizzas', selected: false },
@@ -31,6 +26,6 @@ export class HeaderComponent implements OnInit {
   }
 
   private loadMenu(url: string) {
-    this.menus.forEach(menu => menu.selected = menu.url === url)
+    this.menus.forEach(menu => menu.selected = url.startsWith(menu.url))
   }
 }

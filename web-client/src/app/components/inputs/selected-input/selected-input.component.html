@@ -1,8 +1,9 @@
-<div class="d-flex flex-wrap justify-content-center">
+<div class="d-flex flex-wrap gap-1">
   <ng-container *ngFor="let item of items">
-    <button class="btn position-relative" [ngClass]="{'container-item': item.selected}" (click)="select(item)">
-      <div [ngClass]="item.id"></div>
-      <span class="position-absolute top-0 start-100 translate-middle" *ngIf="item.selected">
+    <button type="button" class="position-relative" [ngClass]="{'selected-item': item.isSelected}"
+      (click)="select(item)">
+      <ng-container *ngTemplateOutlet="itemTemplate; context: {$implicit: item}"></ng-container>
+      <span class="position-absolute top-0 start-100" *ngIf="item.isSelected">
         <i class="bi bi-check-circle-fill"></i>
       </span>
     </button>

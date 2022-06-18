@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Selectable } from 'src/app/shared/models/selectable';
 
@@ -14,29 +14,35 @@ import { Selectable } from 'src/app/shared/models/selectable';
     }
   ]
 })
-export class SelectedInputComponent implements ControlValueAccessor, OnInit {
-  @Input() headers!: string[];
-  items!: Selectable[];
-  value!: string;
-  
+export class SelectedInputComponent implements ControlValueAccessor, OnChanges {
+  @Input() itemTemplate!: TemplateRef<Selectable>;
+  @Input() items!: Selectable[];
+  value!: string | string[];
+
   private onTouched!: Function;
   private onChanged!: Function;
 
-  ngOnInit(): void {
-    this.items = this.headers.map(header => ({ id: header, selected: this.value === header }));
+  ngOnChanges(_: SimpleChanges): void {
+    this.loadItems();
   }
 
   select(item: Selectable): void {
-    this.items.forEach(current => current.selected = false);
-    item.selected = true;
+    const { value, isSelected } = item;
+    if (Array.isArray(this.value)) {
+      this.value = isSelected ? this.value.filter(data => data !== value) : [...this.value, value];
+    } else {
+      this.items.forEach(item => item.isSelected = false);
+      this.value = isSelected ? '' : value;
+    }
+    item.isSelected = !isSelected;
 
     this.onTouched();
-    this.value = item.id;
     this.onChanged(this.value);
   }
 
-  writeValue(value: string): void {
+  writeValue(value: string | string[]): void {
     this.value = value;
+    this.loadItems();
   }
 
   registerOnChange(fn: any): void {
@@ -45,5 +51,10 @@ export class SelectedInputComponent implements ControlValueAccessor, OnInit {
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  private loadItems(): void {
+    this.items?.filter(item => Array.isArray(this.value) ? this.value.includes(item.value) : item.value === this.value)
+      .forEach(item => item.isSelected = true);
   }
 }

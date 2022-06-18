@@ -5,3 +5,7 @@ nav.navbar {
 .underline {
     border-bottom: 1px solid var(--gp-text-dark);
 }
+
+div.container {
+    justify-content: normal;
+}

@@ -8,14 +8,15 @@ describe('ViewerPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewerPageComponent ]
+      declarations: [ViewerPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewerPageComponent);
     component = fixture.componentInstance;
+    component.pageable = { currentPage: 1, totalPages: 1, totalItems: 0, items: [] };
     fixture.detectChanges();
   });
 
