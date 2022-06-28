@@ -1,7 +1,7 @@
-<nav>
-  <ul class="pagination">
+<nav class="mt-2 ms-1">
+  <ul class="pagination pagination-sm mb-0">
     <li class="page-item" [ngClass]="{'disabled': !hasLeft()}">
-      <a class="page-link" [routerLink]="[]" (click)="moveLeft()">&laquo;</a>
+      <a class="page-link" [routerLink]="[]" (click)="moveLeft()"><i class="bi bi-chevron-left"></i></a>
     </li>
 
     <ng-container *ngFor="let page of pageList">
@@ -11,7 +11,7 @@
     </ng-container>
 
     <li class="page-item" [ngClass]="{'disabled': !hasRight()}">
-      <a class="page-link" [routerLink]="[]" (click)="moveRight()">&raquo;</a>
+      <a class="page-link" [routerLink]="[]" (click)="moveRight()"><i class="bi bi-chevron-right"></i></a>
     </li>
   </ul>
 </nav>

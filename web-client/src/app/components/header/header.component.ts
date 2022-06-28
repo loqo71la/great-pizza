@@ -12,6 +12,7 @@ const DefaultMenus = [
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  isCollapsed: boolean = false;
   menus: Menu[];
 
   constructor(private router: Router) {
@@ -21,8 +22,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.loadMenu(this.router.url);
     this.router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) this.loadMenu(val.url);
+      if (val instanceof NavigationEnd) this.loadMenu(val.urlAfterRedirects);
     });
+  }
+
+  collapse(value: boolean = false): void {
+    this.isCollapsed = value;
   }
 
   private loadMenu(url: string) {

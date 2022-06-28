@@ -1,11 +1,11 @@
-<div class="d-flex flex-wrap gap-1">
-  <ng-container *ngFor="let item of items">
-    <button type="button" class="position-relative" [ngClass]="{'selected-item': item.isSelected}"
+<div [class]="containerStyle">
+  <div *ngFor="let item of items">
+    <button type="button" class="btn p-1 w-100 position-relative" [ngClass]="{'selected-item': item.isSelected}"
       (click)="select(item)">
       <ng-container *ngTemplateOutlet="itemTemplate; context: {$implicit: item}"></ng-container>
       <span class="position-absolute top-0 start-100" *ngIf="item.isSelected">
         <i class="bi bi-check-circle-fill"></i>
       </span>
     </button>
-  </ng-container>
+  </div>
 </div>

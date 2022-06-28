@@ -1,10 +1,6 @@
-button {
+.btn {
     background-color: var(--gp-bg-select-item);
-    border-color: var(--gp-border-select-item);
-    padding: 0.25rem 0.35rem;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 0.45rem;
+    border-radius: 0.5rem;
 }
 
 .selected-item {
@@ -14,5 +10,5 @@ button {
 
 span.position-absolute {
     transform: translate(-65%,-35%);
-    color: var(--gp-bg-button-card);
+    color: var(--gp-bg-btn-primary);
 }

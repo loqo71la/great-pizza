@@ -1,19 +1,17 @@
 <div class="mt-2">
   <label [for]="id">
     {{label}}
-    <span *ngIf="control.errors?.['required']"> *</span>
+    <span *ngIf="required"> *</span>
   </label>
   <ng-container [ngSwitch]="type">
     <ng-container *ngSwitchCase="'text'">
-      <input type="text" [id]="id" [class]="style" autocomplete="off" spellcheck="false"
-        [formControl]="control">
+      <input type="text" [id]="id" [class]="style" autocomplete="off" spellcheck="false" [formControl]="control">
     </ng-container>
 
     <ng-container *ngSwitchCase="'price'">
       <div class="input-group">
         <span class="input-group-text">$</span>
-        <input type="number" [id]="id" [class]="style" autocomplete="off" step="0.1"
-          [formControl]="control">
+        <input type="number" [id]="id" [class]="style" autocomplete="off" step="0.1" [formControl]="control">
       </div>
     </ng-container>
 
@@ -28,18 +26,21 @@
     <ng-container *ngSwitchCase="'select-size'">
       <gp-selected-input [items]="headers!" [itemTemplate]="size" [formControl]="control">
         <ng-template let-item #size>
-          <div class="size-text">{{item.value}}</div>
+          <div class="size-text px-1">{{item.value}}</div>
         </ng-template>
       </gp-selected-input>
     </ng-container>
 
     <ng-container *ngSwitchCase="'select-list'">
-      <gp-selected-input [items]="headers!" [itemTemplate]="list" [formControl]="control">
+      <gp-selected-input [items]="headers!" [itemTemplate]="list" [formControl]="control"
+        containerStyle="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 mx-0">
         <ng-template let-item #list>
-          <div class="d-flex align-items-center">
-            <div [ngClass]="item.data.type"></div>
-            <div class="text-start ms-1">
-              <p class="m-0 fw-semibold text-truncate list-text">{{item.data.name}}</p>
+          <div class="row">
+            <div class="col-3">
+              <div [ngClass]="item.data.type"></div>
+            </div>
+            <div class="col-9 text-start">
+              <p class="m-0 fw-semibold text-truncate">{{item.data.name}}</p>
               <p class="m-0 fw-bolder"><small>${{item.data.price}}</small></p>
             </div>
           </div>
@@ -47,7 +48,7 @@
       </gp-selected-input>
     </ng-container>
   </ng-container>
-  
+
   <span class="invalid-feedback" *ngIf="control.errors?.['minlength']">
     Name must have at least {{ control.errors?.['minlength']?.requiredLength}} characters.
   </span>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Selectable } from 'src/app/shared/models/selectable';
 
 @Component({
@@ -16,6 +16,10 @@ export class InputComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.label?.toLowerCase()?.replace(/\s+/, '') ?? '';
+  }
+
+  get required() : boolean {
+    return this.control.hasValidator(Validators.required)
   }
 
   get style(): string {

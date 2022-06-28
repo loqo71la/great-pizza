@@ -11,7 +11,7 @@ describe('SinglePizzaComponent', () => {
   let component: SinglePizzaComponent;
   let fixture: ComponentFixture<SinglePizzaComponent>;
 
-  const pizzaServiceMock = jasmine.createSpyObj('PizzaService', ['getById', 'update', 'add', 'assing']);
+  const pizzaServiceMock = jasmine.createSpyObj('PizzaService', ['getById', 'update', 'add', 'assing', 'delete']);
   const toppingServiceMock = jasmine.createSpyObj('ToppingService', ['getAll']);
   const routeMock = { snapshot: { paramMap: { get: jasmine.createSpy('get') } } };
   const routerMock = jasmine.createSpyObj('Router', ['navigate']);
@@ -56,8 +56,10 @@ describe('SinglePizzaComponent', () => {
   });
 
   it('#loadTopping should call PizzaService to load the pageable "1" by default', () => {
+    const topping = { id: 22, name: '', type: '', price: 0 };
+    const pageable = { currentPage: 1, totalPages: 1, totalItems: 1, items: [topping] };
     routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue('create');
-    toppingServiceMock.getAll.and.returnValue(EMPTY);
+    toppingServiceMock.getAll.and.returnValue(of(pageable));
     fixture.detectChanges();
 
     component.loadTopping();
@@ -94,5 +96,20 @@ describe('SinglePizzaComponent', () => {
     expect(component).toBeTruthy();
     expect(toppingServiceMock.getAll).toHaveBeenCalled();
     expect(routerMock.navigate).toHaveBeenCalledWith(['pizzas']);
+  });
+
+  it('#onActions should call to PizzaService  to delete an already existing pizza', () => {
+    const pizza = { name: '', price: 0, type: '', size: '', id: 11, toppings: [] };
+    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue('11');
+    pizzaServiceMock.getById.withArgs('11').and.returnValue(of(pizza));
+    toppingServiceMock.getAll.and.returnValue(EMPTY);
+    fixture.detectChanges();
+
+    spyOn(window, 'confirm').and.callFake(() => true);
+    pizzaServiceMock.delete.withArgs(11).and.returnValue(EMPTY);
+
+    component.delete();
+    expect(pizzaServiceMock.getById).toHaveBeenCalledWith('11');
+    expect(pizzaServiceMock.delete).toHaveBeenCalledWith(11);
   });
 });

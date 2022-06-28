@@ -1,8 +1,7 @@
 <ng-container *ngIf="toppingPage | async as page; else loading">
-  <gp-viewer-items name="Toppings" [pageable]="page" (actions)="onActions($event)"></gp-viewer-items>
+  <gp-viewer-items name="Topping" [pageable]="page" (actions)="onActions($event)" (selectedPage)="loadToppings($event)">
+  </gp-viewer-items>
   <gp-viewer-page [pageable]="page" (actions)="onActions($event)"></gp-viewer-page>
-  <gp-pagination [currentPage]="page.currentPage" [totalPages]="page.totalPages" (selectedPage)="loadToppings($event)">
-  </gp-pagination>
 </ng-container>
 
 <ng-template #loading>

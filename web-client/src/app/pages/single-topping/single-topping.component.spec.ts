@@ -10,7 +10,7 @@ describe('SingleToppingComponent', () => {
   let component: SingleToppingComponent;
   let fixture: ComponentFixture<SingleToppingComponent>;
 
-  const serviceMock = jasmine.createSpyObj('ToppingService', ['getById', 'update', 'add']);
+  const serviceMock = jasmine.createSpyObj('ToppingService', ['getById', 'update', 'add', 'delete']);
   const routeMock = { snapshot: { paramMap: { get: jasmine.createSpy('get') } } };
   const routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -64,12 +64,27 @@ describe('SingleToppingComponent', () => {
   });
 
   it('#cancel should call Router to navigate to "/toppings"', () => {
+    routeMock.snapshot.paramMap.get.withArgs('toppingId').and.returnValue('create');
     fixture.detectChanges();
-    
+
     component.cancel();
 
     expect(component).toBeTruthy();
     expect(routerMock.navigate).toHaveBeenCalledWith(['toppings']);
+  });
+
+  it('#delete should call to ToppingService to delete an already existing topping', () => {
+    const topping = { name: '', price: 0, type: '', id: 14 };
+    routeMock.snapshot.paramMap.get.withArgs('toppingId').and.returnValue('14');
+    serviceMock.getById.withArgs('14').and.returnValue(of(topping));
+    fixture.detectChanges();
+    
+    spyOn(window, 'confirm').and.callFake(() => true);
+    serviceMock.delete.withArgs(14).and.returnValue(EMPTY);
+
+    component.delete();
+    expect(serviceMock.getById).toHaveBeenCalledWith('14');
+    expect(serviceMock.delete).toHaveBeenCalledWith(14);
   });
 });
 

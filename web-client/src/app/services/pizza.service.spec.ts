@@ -24,7 +24,8 @@ describe('PizzaService', () => {
 
   it('#getAll should call the Http module to get a pageable Pizza', () => {
     const params = { params: { page, limit } };
-    httpMock.get.withArgs(pizzaUrl, params).and.returnValue(EMPTY);
+    const pageable = { currentPage: 1, totalPages: 1, totalItems: 0, items: [] };
+    httpMock.get.withArgs(pizzaUrl, params).and.returnValue(of(pageable));
 
     service.getAll();
     expect(service).toBeTruthy();
@@ -32,11 +33,18 @@ describe('PizzaService', () => {
   });
 
   it('#getById should call the Http module to get a Pizza by id "3"', () => {
-    httpMock.get.withArgs(`${pizzaUrl}/3`).and.returnValue(EMPTY);
+    const pizza = { id: 3, name: '', size: '', type: '', price: 0, createdDate: '2022-06-23T20:17:44.346Z', modifiedDate: '2022-06-23T20:17:44.346Z' };
+    httpMock.get.withArgs(`${pizzaUrl}/3`).and.returnValue(of(pizza));
 
-    service.getById('3');
     expect(service).toBeTruthy();
-    expect(httpMock.get).toHaveBeenCalledWith(`${pizzaUrl}/3`);
+
+    const expectedDate = new Date('2022-06-23T20:17:44.346Z');
+    service.getById('3').subscribe(result => {
+      expect(result.id).toBe(3);
+      expect(result.createdDate).toEqual(expectedDate);
+      expect(result.modifiedDate).toEqual(expectedDate);
+      expect(httpMock.get).toHaveBeenCalledWith(`${pizzaUrl}/3`);
+    });
   });
 
   it('#add should call the Http module to add a new Pizza', () => {

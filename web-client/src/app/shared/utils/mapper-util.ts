@@ -10,7 +10,7 @@ export abstract class MapperUtil {
       size: item.size,
       type: item.type,
       price: item.price,
-      toppings: item.toppings.map(MapperUtil.toTopping)
+      toppings: item.toppings?.map(MapperUtil.toTopping)
     };
     if (item.createdDate) pizza.createdDate = new Date(item.createdDate);
     if (item.modifiedDate) pizza.modifiedDate = new Date(item.modifiedDate);
