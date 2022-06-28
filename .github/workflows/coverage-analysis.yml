@@ -1,0 +1,70 @@
+name: Workflow for Coverage Analysis
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  web-client-coverage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web-client
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@master
+        with:
+        node-version: '16.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: web-client-coverage
+          path: coverage/web-client/cobertura-coverage.xml
+
+  rest-api-coverage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rest-api/GreatPizza.WebApi.Test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Generate coverage report
+        run: dotnet test --collect:"XPlat Code Coverage" --settings runsettings.xml
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: web-client-coverage
+          path: TestResults/**/coverage.cobertura.xml
+
+  upload-to-codecov:
+    needs: [web-client-coverage, rest-api-coverage]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
