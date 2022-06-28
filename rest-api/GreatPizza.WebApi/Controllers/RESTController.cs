@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GreatPizza.WebApi.Controllers;
 
-public abstract class RESTController<TD, TE> : ControllerBase where TD : IDTO where TE : IEntity
+public abstract class RESTController<TD, TE> : ControllerBase where TD : IDTO where TE : Entity
 {
     protected readonly ICRUDService<TE> _service;
     private readonly IMapper<TD, TE> _mapper;

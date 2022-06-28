@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GreatPizza.Domain.Entities;
+﻿using GreatPizza.Domain.Entities;
 using GreatPizza.WebApi.DTOs;
 using GreatPizza.WebApi.Interfaces;
 
 namespace GreatPizza.WebApi.Mappers;
 
-public abstract class Mapper<TD, TE> : IMapper<TD, TE> where TD : IDTO, new() where TE : IEntity, new()
+public abstract class FoodMapper<TD, TE> : IMapper<TD, TE> where TD : IDTO, new() where TE : Food, new()
 {
     private const string DateFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
@@ -16,11 +13,11 @@ public abstract class Mapper<TD, TE> : IMapper<TD, TE> where TD : IDTO, new() wh
         var entity = new TE { Id = dto.Id, Type = dto.Type };
         if (!string.IsNullOrEmpty(dto.CreatedDate))
         {
-            entity.CreatedDate = DateTime.Parse(dto.CreatedDate);
+            entity.CreatedAt = DateTime.Parse(dto.CreatedDate);
         }
         if (!string.IsNullOrEmpty(dto.ModifiedDate))
         {
-            entity.CreatedDate = DateTime.Parse(dto.ModifiedDate);
+            entity.CreatedAt = DateTime.Parse(dto.ModifiedDate);
         }
         return entity;
     }
@@ -28,13 +25,13 @@ public abstract class Mapper<TD, TE> : IMapper<TD, TE> where TD : IDTO, new() wh
     public virtual TD ToDTO(TE entity)
     {
         var dto = new TD { Id = entity.Id, Type = entity.Type };
-        if (entity.CreatedDate != DateTime.MinValue)
+        if (entity.CreatedAt != DateTime.MinValue)
         {
-            dto.CreatedDate = entity.CreatedDate.ToUniversalTime().ToString(DateFormat);
+            dto.CreatedDate = entity.CreatedAt.ToUniversalTime().ToString(DateFormat);
         }
-        if (entity.ModifiedDate != DateTime.MinValue)
+        if (entity.UpdatedAt != DateTime.MinValue)
         {
-            dto.CreatedDate = entity.ModifiedDate.ToUniversalTime().ToString(DateFormat);
+            dto.ModifiedDate = entity.UpdatedAt.ToUniversalTime().ToString(DateFormat);
         }
         return dto;
     }

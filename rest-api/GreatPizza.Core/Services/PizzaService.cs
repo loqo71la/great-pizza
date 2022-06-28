@@ -5,7 +5,7 @@ using GreatPizza.Core.Interfaces;
 
 namespace GreatPizza.Core.Services;
 
-public class PizzaService : CRUDService<Pizza>, IPizzaService
+public class PizzaService : FoodService<Pizza>, IPizzaService
 {
     private readonly IToppingRepository _toppingRepository;
 
@@ -15,23 +15,14 @@ public class PizzaService : CRUDService<Pizza>, IPizzaService
         _toppingRepository = toppingRepository;
     }
 
-    public override async Task Add(Pizza newPizza)
+    public async Task AssignTopping(int pizzaId, IEnumerable<int>? toppingIds)
     {
-        var savedPizza = await _repository.GetWhere(pizza => pizza.Name == newPizza.Name);
-        if (savedPizza != null)
+        if (toppingIds == null)
         {
-            throw new AlreadyExistException(typeof(Pizza), newPizza.Name);
+            return;
         }
-        await base.Add(newPizza);
-    }
 
-    public async Task AssignTopping(int pizzaId, IEnumerable<int> toppingIds)
-    {
-        var pizza = await _repository.Get(pizzaId);
-        if (pizza == null)
-        {
-            throw new NotFoundException(typeof(Pizza), pizzaId);
-        }
+        var pizza = await base.Get(pizzaId);
         var savedToppings = await _toppingRepository.GetAllWhere(topping => toppingIds.Contains(topping.Id));
         var notFoundToppings = toppingIds.Except(savedToppings.Select(topping => topping.Id));
         if (notFoundToppings.Any())
@@ -39,19 +30,19 @@ public class PizzaService : CRUDService<Pizza>, IPizzaService
             throw new NotFoundException(typeof(Topping), string.Join(",", notFoundToppings));
         }
 
-        pizza.Toppings.ToList().ForEach(topping =>
+        pizza.Toppings!.ToList().ForEach(topping =>
         {
             if (!savedToppings.Any(target => target.Id == topping.Id))
             {
-                pizza.Toppings.Remove(topping);
+                pizza.Toppings!.Remove(topping);
             }
         });
 
         savedToppings.ToList().ForEach(target =>
         {
-            if (!pizza.Toppings.Any(topping => topping.Id == target.Id))
+            if (!pizza.Toppings!.Any(topping => topping.Id == target.Id))
             {
-                pizza.Toppings.Add(target);
+                pizza.Toppings!.Add(target);
             }
         });
         await _repository.Update(pizza);

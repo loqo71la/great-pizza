@@ -17,6 +17,7 @@ public class PizzaControllerTest
     private readonly Mock<IToppingRepository> _mockToppingRepository;
     private readonly Mock<IPizzaRepository> _mockPizzaRepository;
     private readonly HttpClient _client;
+    private const Object _null = null;
 
     public PizzaControllerTest()
     {
@@ -40,17 +41,17 @@ public class PizzaControllerTest
         var emptyPizzas = Array.Empty<Pizza>();
         return new List<object[]>
         {
-            new object[] {"", 0, 1, 1, null, null, emptyPizzas},
-            new object[] {"?limit=10&page=1", 0, 1, 1, null, null, emptyPizzas},
-            new object[] {"", 3, 1, 1, null, null, pizzas},
-            new object[] {"?limit=1", 3, 3, 1, "http://localhost/api/pizza?page=2&limit=1", null, pizzas},
+            new object[] {"", 0, 1, 1, _null, _null, emptyPizzas},
+            new object[] {"?limit=10&page=1", 0, 1, 1, _null, _null, emptyPizzas},
+            new object[] {"", 3, 1, 1, _null, _null, pizzas},
+            new object[] {"?limit=1", 3, 3, 1, "http://localhost/api/pizza?page=2&limit=1", _null, pizzas},
             new object[]
             {
                 "?page=2&limit=1", 3, 3, 2, "http://localhost/api/pizza?page=3&limit=1",
                 "http://localhost/api/pizza?page=1&limit=1", pizzas
             },
             new object[]
-                {"?page=3&limit=1", 3, 3, 3, null, "http://localhost/api/pizza?page=2&limit=1", pizzas},
+                {"?page=3&limit=1", 3, 3, 3, _null, "http://localhost/api/pizza?page=2&limit=1", pizzas},
         };
     }
 
@@ -75,12 +76,12 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal(totalItems, pageDto.TotalItems);
-        Assert.Equal(totalPages, pageDto.TotalPages);
-        Assert.Equal(currentPage, pageDto.CurrentPage);
-        Assert.Equal(previous, pageDto.Previous);
-        Assert.Equal(next, pageDto.Next);
-        Assert.NotNull(pageDto.Items);
+        Assert.Equal(totalItems, pageDto?.TotalItems);
+        Assert.Equal(totalPages, pageDto?.TotalPages);
+        Assert.Equal(currentPage, pageDto?.CurrentPage);
+        Assert.Equal(previous, pageDto?.Previous);
+        Assert.Equal(next, pageDto?.Next);
+        Assert.NotNull(pageDto?.Items);
 
         _mockPizzaRepository.Verify(repository => repository.GetAll(It.IsAny<Pageable>()), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Count(), Times.Once);
@@ -102,8 +103,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Pizza with ID [1] was not found.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Pizza with ID [1] was not found.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
     }
 
@@ -117,7 +118,7 @@ public class PizzaControllerTest
             Name = "Hawaiian",
             Price = 12.95m,
             Size = "L",
-            CreatedDate = new DateTime(2021, 7, 7, 0, 0, 0, DateTimeKind.Utc),
+            CreatedAt = new DateTime(2021, 7, 7, 0, 0, 0, DateTimeKind.Utc),
             Toppings = new[] { new Topping { Id = 1 }, new Topping { Id = 2 } }
         };
         _mockPizzaRepository.Setup(repository => repository.Get(1))
@@ -133,12 +134,12 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal(1, pizzaDto.Id);
-        Assert.Equal("Hawaiian", pizzaDto.Name);
-        Assert.Equal(12.95m, pizzaDto.Price);
-        Assert.Equal("L", pizzaDto.Size);
-        Assert.Equal("2021-07-07T00:00:00.000Z", pizzaDto.CreatedDate);
-        Assert.Equal("1,2", string.Join(",", pizzaDto.Toppings.Select(topping => topping.Id)));
+        Assert.Equal(1, pizzaDto?.Id);
+        Assert.Equal("Hawaiian", pizzaDto?.Name);
+        Assert.Equal(12.95m, pizzaDto?.Price);
+        Assert.Equal("L", pizzaDto?.Size);
+        Assert.Equal("2021-07-07T00:00:00.000Z", pizzaDto?.CreatedDate);
+        Assert.Equal("1,2", string.Join(",", pizzaDto?.Toppings?.Select(topping => topping.Id) ?? new List<int>()));
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
     }
 
@@ -163,8 +164,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("http://localhost/api/pizza/1", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("http://localhost/api/pizza/1", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.GetWhere(It.IsAny<Expression<Func<Pizza, bool>>>()),
             Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Add(It.IsAny<Pizza>()), Times.Once);
@@ -188,8 +189,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Pizza with name [Hawaiian] already exist.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Pizza with name [Hawaiian] already exist.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.GetWhere(It.IsAny<Expression<Func<Pizza, bool>>>()),
             Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Add(It.IsAny<Pizza>()), Times.Never);
@@ -213,8 +214,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Pizza with ID [1] was not found.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Pizza with ID [1] was not found.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Never);
     }
@@ -240,8 +241,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Pizza with ID [1] was successfully updated.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Pizza with ID [1] was successfully updated.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);
     }
@@ -263,8 +264,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Pizza with ID [1] was successfully removed.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Pizza with ID [1] was successfully removed.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Remove(It.IsAny<Pizza>()), Times.Never);
     }
@@ -288,8 +289,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Pizza with ID [1] was successfully removed.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Pizza with ID [1] was successfully removed.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Remove(It.IsAny<Pizza>()), Times.Once);
     }
@@ -310,8 +311,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Pizza with ID [1] was not found.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Pizza with ID [1] was not found.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.Get(3), Times.Never);
         _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Never);
@@ -336,8 +337,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Toppings with IDs [7] were not found.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Toppings with IDs [7] were not found.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.GetAllWhere(It.IsAny<Expression<Func<Topping, bool>>>(), null), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Never);
@@ -363,8 +364,8 @@ public class PizzaControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Toppings with IDs [3,7] were successfully assigned.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Toppings with IDs [3,7] were successfully assigned.", responseDto?.Message);
         _mockPizzaRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.GetAllWhere(It.IsAny<Expression<Func<Topping, bool>>>(), null), Times.Once);
         _mockPizzaRepository.Verify(repository => repository.Update(It.IsAny<Pizza>()), Times.Once);

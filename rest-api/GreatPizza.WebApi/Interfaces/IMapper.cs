@@ -3,7 +3,7 @@ using GreatPizza.WebApi.DTOs;
 
 namespace GreatPizza.WebApi.Interfaces;
 
-public interface IMapper<TD, TE> where TD : IDTO where TE : IEntity
+public interface IMapper<TD, TE> where TD : IDTO where TE : Entity
 {
     TE ToEntity(TD dto);
 

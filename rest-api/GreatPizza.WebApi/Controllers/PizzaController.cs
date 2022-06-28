@@ -62,12 +62,12 @@ public class PizzaController : RESTController<PizzaDTO, Pizza>
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AssignTopping(int id, [FromBody] AssignedToppingDTO assignedtoppingDto)
     {
-        var pizzaService = (IPizzaService) _service;
+        var pizzaService = (IPizzaService)_service;
         await pizzaService.AssignTopping(id, assignedtoppingDto.Ids);
         var responseDto = new ResponseDTO
         {
             Status = "Success",
-            Message = $"Toppings with IDs [{string.Join(",", assignedtoppingDto.Ids)}] were successfully assigned."
+            Message = $"Toppings with IDs [{string.Join(",", assignedtoppingDto.Ids ?? new List<int>())}] were successfully assigned."
         };
         return Ok(responseDto);
     }

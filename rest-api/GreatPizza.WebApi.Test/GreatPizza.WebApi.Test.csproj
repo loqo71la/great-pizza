@@ -25,7 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GreatPizza.Domain\GreatPizza.Domain.csproj" />
-      <ProjectReference Include="..\GreatPizza.Program\GreatPizza.Program.csproj" />
+      <ProjectReference Include="..\GreatPizza.Core\GreatPizza.Core.csproj" />
       <ProjectReference Include="..\GreatPizza.WebApi\GreatPizza.WebApi.csproj" />
     </ItemGroup>
 

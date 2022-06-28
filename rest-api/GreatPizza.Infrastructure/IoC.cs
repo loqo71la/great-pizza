@@ -22,5 +22,6 @@ public static class IoC
         var settings = GPDbContextFactory.LoadSettings();
         services.AddDbContext<GPContext>(options =>
             options.UseNpgsql(settings.GetConnectionString("DefaultConnection")));
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 }

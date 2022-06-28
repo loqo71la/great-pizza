@@ -16,12 +16,13 @@ namespace GreatPizza.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
-                    Size = table.Column<string>(type: "varchar", maxLength: 3, nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
-                    Type = table.Column<string>(type: "varchar", maxLength: 30, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Size = table.Column<string>(type: "varchar", maxLength: 4, nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar", maxLength: 20, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Type = table.Column<string>(type: "varchar", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(8,2)", precision: 8, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,11 +35,12 @@ namespace GreatPizza.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
-                    Type = table.Column<string>(type: "varchar", maxLength: 30, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedBy = table.Column<string>(type: "varchar", maxLength: 20, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Type = table.Column<string>(type: "varchar", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(8,2)", precision: 8, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
