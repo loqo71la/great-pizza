@@ -19,7 +19,7 @@ export class InputComponent implements OnInit {
   }
 
   get required() : boolean {
-    return this.control.hasValidator(Validators.required)
+    return this.control?.hasValidator(Validators.required);
   }
 
   get style(): string {
