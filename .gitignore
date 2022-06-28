@@ -22,3 +22,21 @@
 /rest-api/*/msbuild.log
 /rest-api/*/msbuild.err
 /rest-api/*/msbuild.wrn
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+firebase-debug.log*
+firebase-debug.*.log*
+
+# Firebase cache
+.firebase/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock

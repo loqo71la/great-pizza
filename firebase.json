@@ -1,0 +1,12 @@
+{
+    "hosting": {
+      "public": "./web-client/dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "rest-api/**"
+      ]
+    }
+  }
+  
