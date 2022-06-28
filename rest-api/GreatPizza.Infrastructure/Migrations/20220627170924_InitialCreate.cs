@@ -1,5 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
 
 namespace GreatPizza.Infrastructure.Migrations
 {
@@ -11,14 +14,15 @@ namespace GreatPizza.Infrastructure.Migrations
                 name: "Pizzas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Size = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Type = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Size = table.Column<string>(type: "varchar", maxLength: 4, nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar", maxLength: 20, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Type = table.Column<string>(type: "varchar", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(8,2)", precision: 8, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,13 +33,14 @@ namespace GreatPizza.Infrastructure.Migrations
                 name: "Toppings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Type = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedBy = table.Column<string>(type: "varchar", maxLength: 20, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Type = table.Column<string>(type: "varchar", maxLength: 4, nullable: true),
+                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(8,2)", precision: 8, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,8 +51,8 @@ namespace GreatPizza.Infrastructure.Migrations
                 name: "PizzaTopping",
                 columns: table => new
                 {
-                    PizzasId = table.Column<int>(type: "int", nullable: false),
-                    ToppingsId = table.Column<int>(type: "int", nullable: false)
+                    PizzasId = table.Column<int>(type: "integer", nullable: false),
+                    ToppingsId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

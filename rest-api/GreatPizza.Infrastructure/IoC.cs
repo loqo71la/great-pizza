@@ -1,27 +1,27 @@
 ﻿using GreatPizza.Domain.Interfaces;
 using GreatPizza.Infrastructure.Persistence;
 using GreatPizza.Infrastructure.Persistence.Repositories;
-using GreatPizza.Program.Interfaces;
-using GreatPizza.Program.Services;
+using GreatPizza.Core.Interfaces;
+using GreatPizza.Core.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GreatPizza.Infrastructure
+namespace GreatPizza.Infrastructure;
+
+public static class IoC
 {
-    public static class IoC
+    public static void AddServices(this IServiceCollection services)
     {
-        public static void AddServices(this IServiceCollection services)
-        {
-            services.AddScoped<IPizzaRepository, PizzaRepository>();
-            services.AddScoped<IToppingRepository, ToppingRepository>();
+        services.AddScoped<IPizzaRepository, PizzaRepository>();
+        services.AddScoped<IToppingRepository, ToppingRepository>();
 
-            services.AddScoped<IPizzaService, PizzaService>();
-            services.AddScoped<IToppingService, ToppingService>();
+        services.AddScoped<IPizzaService, PizzaService>();
+        services.AddScoped<IToppingService, ToppingService>();
 
-            var settings = GPDbContextFactory.LoadSettings();
-            services.AddDbContext<GPContext>(options =>
-                options.UseSqlServer(settings.GetConnectionString("DefaultConnection")));
-        }
+        var settings = GPDbContextFactory.LoadSettings();
+        services.AddDbContext<GPContext>(options =>
+            options.UseNpgsql(settings.GetConnectionString("DefaultConnection")));
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 }
