@@ -1,8 +1,17 @@
-<nav class="navbar navbar-dark">
-    <div class="container py-1">
-        <div class="container-fluid" ngFor="let menu of menus">
-            <a class="navbar-brand" [ngClass]="{'underline': menu.selected}" [routerLink]="menu.url"
-                *ngFor="let menu of menus">{{menu.name}}</a>
-        </div>
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/']"><span class="text-danger fw-bold">Great</span>Pizza</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+      aria-controls="navbarMenu" [attr.aria-expanded]="isCollapsed" (click)="collapse(!isCollapsed)">
+      <i class="bi bi-list"></i>
+    </button>
+    <div class="navbar-collapse collapse" [ngClass]="{ 'show': isCollapsed }" id="navbarMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item" *ngFor="let menu of menus">
+          <a class="nav-link" [ngClass]="{'active': menu.selected}" [routerLink]="menu.url"
+            (click)="collapse()">{{menu.name}}</a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>

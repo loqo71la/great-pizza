@@ -1,5 +1,5 @@
 export interface Selectable {
-    id: string;
-    name?: string;
-    selected: boolean;
+  data?: any;
+  value: string;
+  isSelected: boolean;
 }

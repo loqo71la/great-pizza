@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
+import { MapperUtil } from '../shared/utils/mapper-util';
 import { Pageable } from '../shared/models/pageable';
 import { Pizza } from '../shared/models/pizza';
 
@@ -14,25 +15,14 @@ export class PizzaService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Pageable<Pizza>> {
-    return this.http.get<Pageable<any>>(`${environment.api.url}/pizza`)
-      .pipe(map(page => {
-        page.items = page.items.map(item => {
-          const createdDate = item.createdDate ? new Date(item.createdDate) : null;
-          const modifiedDate = item.modifiedDate ? new Date(item.modifiedDate) : null;
-          return {
-            id: item.id,
-            name: item.name,
-            size: item.size,
-            type: item.type,
-            price: item.price.toFixed(2),
-            toppings: item.toppings,
-            createdDate,
-            modifiedDate
-          }
-        })
-        return page;
-      }));
+  getAll(page: number = 1, limit: number = environment.api.limit): Observable<Pageable<Pizza>> {
+    return this.http.get<Pageable<any>>(`${environment.api.url}/pizza`, { params: { page, limit } })
+      .pipe(map(page => ({ ...page, items: page.items.map(MapperUtil.toPizza) })));
+  }
+
+  getById(id: string): Observable<Pizza> {
+    return this.http.get<any>(`${environment.api.url}/pizza/${id}`)
+      .pipe(map(MapperUtil.toPizza));
   }
 
   add(pizza: Pizza): Observable<Response> {
@@ -48,6 +38,6 @@ export class PizzaService {
   }
 
   assign(pizzaId: number, toppingIds: number[]): Observable<Response> {
-    return this.http.post<Response>(`${environment.api.url}/pizza/${pizzaId}/topping:assign`, { ids: toppingIds });
+    return this.http.post<Response>(`${environment.api.url}/pizza/${pizzaId}/topping/assign`, { ids: toppingIds });
   }
 }

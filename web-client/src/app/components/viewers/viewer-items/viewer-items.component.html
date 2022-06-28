@@ -1,8 +1,16 @@
-<div class="d-flex justify-content-between align-items-center">
-    <span class="fst-italic m-3">
-        Viewing {{pageable.totalItems / pageable.totalPages}} from {{pageable.totalItems}} {{name}}
+<div class="d-flex justify-content-between align-items-center my-2">
+  <button type="button" class="btn btn-primary px-4" (click)="add()">
+    <i class="bi bi-pencil-square me-2"></i>Add {{name}}
+  </button>
+  <div>
+    <span>
+      {{start}} - {{end}} of {{pageable.totalItems}}
     </span>
-    <button type="button" class="btn btn-main me-1" (click)="onOpenModal()" title="Add">
-        <i class="bi bi-plus-lg"></i>
+    <button type="button" class="btn btn-light ms-1 p-0" [disabled]="start == 1" (click)="moveLeft()">
+      <i class="bi bi-chevron-left"></i>
     </button>
+    <button type="button" class="btn btn-light ms-1 p-0" [disabled]="end == pageable.totalItems" (click)="moveRight()">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
 </div>

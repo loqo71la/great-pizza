@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-
-interface Menu {
-  url: string;
-  name: string;
-  selected: boolean;
-}
+import { Menu } from 'src/app/shared/models/menu';
 
 const DefaultMenus = [
   { url: '/pizzas', name: 'Pizzas', selected: false },
@@ -17,6 +12,7 @@ const DefaultMenus = [
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  isCollapsed: boolean = false;
   menus: Menu[];
 
   constructor(private router: Router) {
@@ -26,11 +22,15 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.loadMenu(this.router.url);
     this.router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) this.loadMenu(val.url);
+      if (val instanceof NavigationEnd) this.loadMenu(val.urlAfterRedirects);
     });
   }
 
+  collapse(value: boolean = false): void {
+    this.isCollapsed = value;
+  }
+
   private loadMenu(url: string) {
-    this.menus.forEach(menu => menu.selected = menu.url === url)
+    this.menus.forEach(menu => menu.selected = url.startsWith(menu.url))
   }
 }

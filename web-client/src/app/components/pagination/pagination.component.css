@@ -1,12 +1,8 @@
 .page-item.active .page-link {
-    background-color: var(--gp-bg-btn-main) !important;
-    border-color: var(--gp-bg-btn-main) !important;
+    background-color: var(--gp-bg-btn-primary);
+    border-color: var(--gp-bg-btn-primary);
 }
 
 .page-link {
-    color: var(--gp-bg-btn-main);
-}
-
-ul.pagination {
-    margin-bottom: 0px;
+    color: var(--gp-bg-btn-primary);
 }

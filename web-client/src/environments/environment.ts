@@ -1,11 +1,20 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+const toppings = [...Array(36).keys()].map(id => `tp${id + 1}`);
+const pizzas = [...Array(12).keys()].map(id => `pz${id + 1}`);
 
 export const environment = {
   production: false,
   api: {
-    url: 'https://localhost:5001/api'
+    url: 'https://localhost:5001/api',
+    error: 'The server encountered an internal error and was unable to complete your request.',
+    limit: 50
+  },
+  headers: {
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+    toppings,
+    pizzas
   }
 };
 
