@@ -22,9 +22,9 @@ describe('ViewerItemsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should generate the message "Viewing 0 from 0 Test" with empty pagination', () => {
+  it('should generate the message "1 - 0 of 0" with empty pagination', () => {
     const span = fixture.debugElement.query(By.css('div span'));
-    expect(span.nativeElement.innerHTML).toContain('Viewing 0 from 0 Test')
+    expect(span.nativeElement.innerHTML).toContain('1 - 0 of 0')
   });
 
   it('should send an event when the "Add" button is pressed', () => {

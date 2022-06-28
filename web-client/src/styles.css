@@ -1,93 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300&family=Roboto:wght@300;400&display=swap');
+
 :root {
-    --gp-text-primary: #24292e;
-    --gp-text-secondary: #717880;
+    --gp-text-primary: #000000;
     --gp-text-dark: #ffffff;
-    --gp-bg-primary: #f4f8ff;
-    --gp-bg-header: #001950;
-    --gp-bg-button-card: #00c3ff;
-    --gp-bg-button-card-hover: #1cb7ffb0;
-    --gp-bg-btn-main: #009de6;
-    --gp-bg-btn-main-hover: #00aeffce;
-    --gp-bg-btn: #ffffff;
-    --gp-bg-btn-hover: #f8f9fa;
+    --gp-bg-primary: #F1F1F1;
+
+    --gp-bg-btn-primary: #0da9fd;
+    --gp-bg-btn-primary-hover: #0993dd;
+
+    --gp-bg-btn-danger: #dc3545;
+    --gp-bg-btn-danger-hover: #c02535;
+
+    --gp-bg-btn-danger-outline: #fde8e0;
+    --gp-bg-btn-danger-outline-hover: #dc3545;
+
+    --gp-bg-btn-light: #ffffff;
+    --gp-bg-btn-light-shadow: rgba(0, 0, 0, 0.25);
+
     --gp-bg-select-item: #edf4fc;
     --gp-bg-select-pressed-item: #ffffff;
     --gp-border-select-item: #ced4da;
+
     --gp-border: #ced4da;
-    --gp-border-loader: #00c3ff;
+    --gp-border-spiner: #0da9fd;
 }
 
 html, body {
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
-    background-color: var(--gp-bg-primary) !important;
-    color: var(--gp-text-primary) !important;
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--gp-bg-primary);
+    color: var(--gp-text-primary);
     font-weight: 300;
 }
 
-.pz1, .pz2, .pz3, .pz4 {
+.pz1, .pz2, .pz3, .pz4, .pz5, .pz6, .pz7, .pz8, .pz9, .pz10 {
     background-image: url('../src/assets/pizzas.png');
     background-repeat: no-repeat;
-    background-position-y: 0px;
-    height: 82px;
-    width: 82px;
+    height: 80px;
+    width: 80px;
 }
 
-.pz1 {
+.pz1, .pz2, .pz3, .pz4, .pz5 {
+    background-position-y: 0px;
+}
+
+.pz6, .pz7, .pz8, .pz9, .pz10 {
+    background-position-y: -80px;
+}
+
+.pz1, .pz6 {
     background-position-x: 0px;
 }
 
-.pz2 {
+.pz2, .pz7 {
     background-position-x: -80px;
 }
 
-.pz3 {
+.pz3, .pz8 {
     background-position-x: -160px;
 }
 
-.pz4 {
+.pz4, .pz9 {
     background-position-x: -240px;
 }
 
-.tp1, .tp2, .tp3, .tp4, .tp5, .tp6, .tp7, .tp8, .tp9, .tp10, .tp11, .tp12 {
-    background-image: url('../src/assets/toppings.png');
-    background-repeat: no-repeat;
-    min-width: 50px;
-    width: 50px;
-    height: 50px;
+.pz5, .pz10 {
+    background-position-x: -320px;
 }
 
-.tp1, .tp2, .tp3, .tp4, .tp5, .tp6 {
+.tp1, .tp2, .tp3, .tp4, .tp5, .tp6, .tp7, .tp8, .tp9, .tp10, .tp11, .tp12,
+.tp13, .tp14, .tp15, .tp16, .tp17, .tp18, .tp19, .tp20, .tp21, .tp22, .tp23, .tp24,
+.tp25, .tp26, .tp27, .tp28, .tp29, .tp30, .tp31, .tp32, .tp33, .tp34, .tp35, .tp36 {
+    background-image: url('../src/assets/toppings.png');
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 50px;
+}
+
+.tp1, .tp2, .tp3, .tp4, .tp5, .tp6, .tp7, .tp8, .tp9 {
     background-position-y: 0px;
 }
 
-.tp7, .tp8, .tp9, .tp10, .tp11, .tp12 {
+.tp10, .tp11, .tp12, .tp13, .tp14, .tp15, .tp16, .tp17, .tp18 {
     background-position-y: -50px;
 }
 
-.tp1, .tp7 {
+.tp19, .tp20, .tp21, .tp22, .tp23, .tp24, .tp25, .tp26, .tp27 {
+    background-position-y: -100px;
+}
+
+.tp28, .tp29, .tp30, .tp31, .tp32, .tp33, .tp34, .tp35, .tp36 {
+    background-position-y: -150px;
+}
+
+.tp1, .tp10, .tp19, .tp28 {
     background-position-x: 0px;
 }
 
-.tp2, .tp8 {
+.tp2, .tp11, .tp20, .tp29 {
     background-position-x: -50px;
 }
 
-.tp3, .tp9 {
+.tp3, .tp12, .tp21, .tp30 {
     background-position-x: -100px;
 }
 
-.tp4, .tp10 {
+.tp4, .tp13, .tp22, .tp31 {
     background-position-x: -150px;
 }
 
-.tp5, .tp11 {
+.tp5, .tp14, .tp23, .tp32 {
     background-position-x: -200px;
 }
 
-.tp6, .tp12 {
+.tp6, .tp15, .tp24, .tp33 {
     background-position-x: -250px;
 }
 
+.tp7, .tp16, .tp25, .tp34 {
+    background-position-x: -300px;
+}
+
+.tp8, .tp17, .tp26, .tp35 {
+    background-position-x: -350px;
+}
+
+.tp9, .tp18, .tp27, .tp36 {
+    background-position-x: -400px;
+}
+
+/* Overriding Bootstrap classes */
 span.input-group-text {
     background-color: var(--gp-bg-select-item);
+}
+
+.btn {
+    border-radius: 1.5rem;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: var(--gp-bg-btn-primary);
+    border-color: var(--gp-bg-btn-primary);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--gp-bg-btn-primary-hover);
+    border-color: var(--gp-bg-btn-primary-hover);
+}
+
+.btn-danger {
+    background-color: var(--gp-bg-btn-danger);
+    border-color: var(--gp-bg-btn-danger);
+}
+
+.btn-danger:hover {
+    background-color: var(--gp-bg-btn-danger-hover);
+    border-color: var(--gp-bg-btn-danger-hover);
+}
+
+.btn-light {
+    background-color: var(--gp-bg-btn-light);
+}
+
+.btn-light:hover {
+    box-shadow: 0 0.15rem 0.35rem var(--gp-bg-btn-light-shadow);
+}
+
+.btn-outline-danger {
+    background-color: var(--gp-bg-btn-danger-outline);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--gp-bg-btn-danger-outline-hover);
+}
+
+input.form-control, span.input-group-text {
+    padding: 0.25rem 0.5rem;
 }

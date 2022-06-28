@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ToppingService } from './topping.service';
@@ -25,7 +25,8 @@ describe('ToppingService', () => {
 
   it('#getAll should call the Http module to get a pageable Topping', () => {
     const params = { params: { page, limit } };
-    httpMock.get.withArgs(toppingUrl, params).and.returnValue(EMPTY);
+    const pageable = { currentPage: 1, totalPages: 1, totalItems: 0, items: [] };
+    httpMock.get.withArgs(toppingUrl, params).and.returnValue(of(pageable));
 
     service.getAll();
     expect(service).toBeTruthy();
@@ -33,11 +34,18 @@ describe('ToppingService', () => {
   });
 
   it('#getById should call the Http module to get a Topping by id "22"', () => {
-    httpMock.get.withArgs(`${toppingUrl}/22`).and.returnValue(EMPTY);
+    const topping = { id: 22, name: '', type: '', price: 0, createdDate: '2022-06-23T20:17:44.346Z', modifiedDate: '2022-06-23T20:17:44.346Z' };
+    httpMock.get.withArgs(`${toppingUrl}/22`).and.returnValue(of(topping));
 
-    service.getById('22');
     expect(service).toBeTruthy();
-    expect(httpMock.get).toHaveBeenCalledWith(`${toppingUrl}/22`);
+
+    const expectedDate = new Date('2022-06-23T20:17:44.346Z');
+    service.getById('22').subscribe(result => {
+      expect(result.id).toBe(22);
+      expect(result.createdDate).toEqual(expectedDate);
+      expect(result.modifiedDate).toEqual(expectedDate);
+      expect(httpMock.get).toHaveBeenCalledWith(`${toppingUrl}/22`);
+    });
   });
 
   it('#add should call the Http module to add a new Topping', () => {

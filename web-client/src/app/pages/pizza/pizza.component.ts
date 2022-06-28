@@ -31,11 +31,6 @@ export class PizzaComponent implements OnInit {
 
   onActions(value: any) {
     if (value.action === 'add') this.router.navigate(['pizzas', 'create']);
-    if (value.action === 'edit') this.router.navigate(['pizzas', value.item.id]);
-
-    if (value.action === 'delete') {
-      const response = confirm(`Are you sure you want to delete "${value.item.name}"`);
-      if (response) this.pizzaService.delete(value.item.id).subscribe(_ => this.loadPizzas());
-    }
+    if (value.action === 'open') this.router.navigate(['pizzas', value.item.id]);
   }
 }

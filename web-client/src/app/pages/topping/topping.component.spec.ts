@@ -9,7 +9,7 @@ describe('ToppingComponent', () => {
   let component: ToppingComponent;
   let fixture: ComponentFixture<ToppingComponent>;
 
-  const serviceMock = jasmine.createSpyObj('ToppingService', ['getAll', 'delete']);
+  const serviceMock = jasmine.createSpyObj('ToppingService', ['getAll']);
   const routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async () => {
@@ -47,16 +47,8 @@ describe('ToppingComponent', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['toppings', 'create']);
   });
 
-  it('#onActions should navigate to ["toppings", "34"] with "edit" action', () => {
-    component.onActions({ action: 'edit', item: { id: '34' } });
+  it('#onActions should navigate to ["toppings", "34"] with "open" action', () => {
+    component.onActions({ action: 'open', item: { id: '34' } });
     expect(routerMock.navigate).toHaveBeenCalledWith(['toppings', '34']);
-  });
-
-  it('#onActions should call to ToppingService with "delete" action', () => {
-    spyOn(window, 'confirm').and.callFake(() => true);
-    serviceMock.delete.withArgs('14').and.returnValue(EMPTY);
-
-    component.onActions({ action: 'delete', item: { id: '14' } });
-    expect(serviceMock.delete).toHaveBeenCalledWith('14');
   });
 });

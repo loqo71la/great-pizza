@@ -22,6 +22,8 @@ export class SinglePizzaComponent implements OnInit {
   pizzaHeaders: Selectable[] = DataUtil.buildHeaders('pizzas');
   sizeHeaders: Selectable[] = DataUtil.buildHeaders('sizes');
   toppingHeaders: Selectable[] = [];
+  isSubmitLoading: boolean = false;
+  isDeleteLoading: boolean = false;
 
   toppingPage!: Pageable<Topping>;
   form!: FormGroup;
@@ -61,6 +63,18 @@ export class SinglePizzaComponent implements OnInit {
     return this.form.get(name) as FormControl;
   }
 
+  delete(): void {
+    const response = confirm(`Are you sure you want to delete "${this.pizza.name}"`);
+    if (!response) return;
+
+    this.isDeleteLoading = true;
+    this.pizzaService.delete(this.pizza.id)
+      .subscribe(_ => {
+        this.isDeleteLoading = false;
+        this.cancel();
+      });
+  }
+
   loadTopping(page: number = 1): void {
     this.toppingService.getAll(page)
       .subscribe(toppingPage => {
@@ -72,14 +86,19 @@ export class SinglePizzaComponent implements OnInit {
   }
 
   submit(): void {
-    const error = (response: any) => alert(response.error.message ?? environment.api.error);
+    const error = (response: any) => {
+      alert(response.error.message ?? environment.api.error);
+      this.isSubmitLoading = false;
+    };
     const next = (response: any) => {
       if (this.pizza.toppings) {
         this.pizzaService.assign(this.findPizzaId(response), this.form.value.toppings)
           .subscribe(_ => this.cancel());
       }
+      this.isSubmitLoading = false;
     };
 
+    this.isSubmitLoading = true;
     this.pizza = { ...this.form.value, id: this.pizza.id };
     if (this.pizza.id) this.pizzaService.update(this.pizza).subscribe({ next, error });
     else this.pizzaService.add(this.pizza).subscribe({ next, error });

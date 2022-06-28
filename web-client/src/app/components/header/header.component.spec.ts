@@ -35,7 +35,7 @@ describe('HeaderComponent', () => {
   it('should be created with 2 menus ["Pizzas", "Toppings"] by default', () => {
     expect(component).toBeTruthy();
 
-    const menus = fixture.debugElement.queryAll(By.css('a.navbar-brand'));
+    const menus = fixture.debugElement.queryAll(By.css('a.nav-link'));
     expect(menus.length).toBe(2);
     expect(menus[0].nativeElement.textContent).toBe('Pizzas')
     expect(menus[1].nativeElement.textContent).toBe('Toppings');

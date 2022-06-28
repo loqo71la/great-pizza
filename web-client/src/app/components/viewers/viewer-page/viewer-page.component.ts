@@ -15,11 +15,6 @@ export class ViewerPageComponent {
     return item.toppings?.map((topping: Topping) => topping.name).join(', ') || ' ';
   }
 
-  loadSubTotal(item: any): number {
-    return item.toppings?.map((topping: any) => topping.price)
-      .reduce((first: number, second: number) => first + second, 0) || 0;
-  }
-
   loadTotal(item: any): number {
     return Number(item.price) + this.loadSubTotal(item);
   }
@@ -28,15 +23,16 @@ export class ViewerPageComponent {
     return item.toppings?.length || 0 > 0;
   }
 
-  getLastModified(pizza: any) {
-    return pizza.modifiedDate ? pizza.modifiedDate : pizza.createdDate;
+  getLastModified(item: any): Date {
+    return item.modifiedDate ? item.modifiedDate : item.createdDate;
   }
 
-  edit(item: any): void {
-    this.actions.emit({ action: 'edit', item })
+  open(item: any): void {
+    this.actions.emit({ action: 'open', item })
   }
 
-  delete(item: any): void {
-    this.actions.emit({ action: 'delete', item })
+  private loadSubTotal(item: any): number {
+    return item.toppings?.map((topping: any) => topping.price)
+      .reduce((first: number, second: number) => first + second, 0) || 0;
   }
 }

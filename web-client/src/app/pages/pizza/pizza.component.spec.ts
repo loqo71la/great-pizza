@@ -10,7 +10,7 @@ describe('PizzaComponent', () => {
   let fixture: ComponentFixture<PizzaComponent>;
 
   const routerMock = jasmine.createSpyObj('Router', ['navigate']);
-  const serviceMock = jasmine.createSpyObj('PizzaService', ['getAll', 'delete']);
+  const serviceMock = jasmine.createSpyObj('PizzaService', ['getAll']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,16 +48,8 @@ describe('PizzaComponent', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['pizzas', 'create']);
   });
 
-  it('#onActions should navigate to ["pizzas", "12"] with "edit" action', () => {
-    component.onActions({ action: 'edit', item: { id: '12' } });
+  it('#onActions should navigate to ["pizzas", "12"] with "open" action', () => {
+    component.onActions({ action: 'open', item: { id: '12' } });
     expect(routerMock.navigate).toHaveBeenCalledWith(['pizzas', '12']);
-  });
-
-  it('#onActions should call to PizzaService with "delete" action', () => {
-    spyOn(window, 'confirm').and.callFake(() => true);
-    serviceMock.delete.withArgs('56').and.returnValue(EMPTY);
-
-    component.onActions({ action: 'delete', item: { id: '56' } });
-    expect(serviceMock.delete).toHaveBeenCalledWith('56');
   });
 });

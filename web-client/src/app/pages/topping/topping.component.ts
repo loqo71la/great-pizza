@@ -31,11 +31,6 @@ export class ToppingComponent implements OnInit {
 
   onActions(value: any) {
     if (value.action === 'add') this.router.navigate(['toppings', 'create']);
-    if (value.action === 'edit') this.router.navigate(['toppings', value.item.id]);
-
-    if (value.action === 'delete') {
-      const response = confirm(`Are you sure you want to delete "${value.item.name}"`);
-      if (response) this.toppingService.delete(value.item.id).subscribe(_ => this.loadToppings());
-    }
+    if (value.action === 'open') this.router.navigate(['toppings', value.item.id]);
   }
 }

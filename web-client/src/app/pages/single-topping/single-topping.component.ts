@@ -17,6 +17,8 @@ type Control = 'name' | 'price' | 'type';
 })
 export class SingleToppingComponent implements OnInit {
   toppingHeaders: Selectable[] = DataUtil.buildHeaders('toppings');
+  isSubmitLoading: boolean = false;
+  isDeleteLoading: boolean = false;
 
   topping!: Topping;
   form!: FormGroup;
@@ -52,10 +54,29 @@ export class SingleToppingComponent implements OnInit {
     return this.form.get(name) as FormControl;
   }
 
-  submit(): void {
-    const next = (_: any) => this.cancel();
-    const error = (response: any) => alert(response.error.message ?? environment.api.error);
+  delete(): void {
+    const response = confirm(`Are you sure you want to delete "${this.topping.name}"`);
+    if (!response) return;
 
+    this.isDeleteLoading = true;
+    this.toppingService.delete(this.topping.id)
+      .subscribe(_ => {
+        this.isDeleteLoading = false;
+        this.cancel();
+      });
+  }
+
+  submit(): void {
+    const next = (_: any) => {
+      this.isSubmitLoading = false;
+      this.cancel();
+    };
+    const error = (response: any) => {
+      alert(response.error.message ?? environment.api.error);
+      this.isSubmitLoading = false;
+    };
+
+    this.isSubmitLoading = true;
     this.topping = { ...this.form.value, id: this.topping.id };
     if (this.topping.id) this.toppingService.update(this.topping).subscribe({ next, error });
     else this.toppingService.add(this.topping).subscribe({ next, error })

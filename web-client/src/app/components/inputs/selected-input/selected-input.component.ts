@@ -15,6 +15,7 @@ import { Selectable } from 'src/app/shared/models/selectable';
   ]
 })
 export class SelectedInputComponent implements ControlValueAccessor, OnChanges {
+  @Input() containerStyle: string = 'd-flex flex-wrap gap-1';
   @Input() itemTemplate!: TemplateRef<Selectable>;
   @Input() items!: Selectable[];
   value!: string | string[];

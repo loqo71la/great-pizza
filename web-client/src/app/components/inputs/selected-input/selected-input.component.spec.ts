@@ -47,9 +47,17 @@ describe('SelectedInputComponent', () => {
 
   it('#select should call "onTouched" and "onChanged" events', () => {
     component.select({ value: 'tp2', isSelected: true });
-
+    
     expect(component).toBeTruthy();
     expect(touchedMock).toHaveBeenCalled();
     expect(changedMock).toHaveBeenCalled();
+  });
+
+  it('#writeValue should update the selectable items', () => {
+    component.writeValue('tp2');
+
+    expect(component).toBeTruthy();
+    expect(component.items[0].isSelected).toBeFalse()
+    expect(component.items[1].isSelected).toBeTruthy()
   });
 });
