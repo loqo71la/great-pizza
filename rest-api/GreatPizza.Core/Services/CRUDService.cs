@@ -6,7 +6,7 @@ using GreatPizza.Core.Interfaces;
 
 namespace GreatPizza.Core.Services;
 
-public abstract class CRUDService<T> : ICRUDService<T> where T : IEntity
+public abstract class CRUDService<T> : ICRUDService<T> where T : Entity
 {
     protected readonly IRepository<T> _repository;
 
@@ -17,7 +17,7 @@ public abstract class CRUDService<T> : ICRUDService<T> where T : IEntity
 
     public virtual async ValueTask<T> Get(int id)
     {
-        var entity = await _repository.Get(id);
+        T entity = await _repository.Get(id);
         if (entity == null)
         {
             throw new NotFoundException(typeof(T), id);
@@ -27,22 +27,11 @@ public abstract class CRUDService<T> : ICRUDService<T> where T : IEntity
 
     public virtual async Task Add(T entity)
     {
-        entity.CreatedDate = DateTime.Now;
+        entity.CreatedAt = DateTime.Now;
         await _repository.Add(entity);
     }
 
-    public virtual async Task Update(int id, T entity)
-    {
-        var savedEntity = await _repository.Get(id);
-        if (savedEntity == null)
-        {
-            throw new NotFoundException(typeof(T), id);
-        }
-
-        Update(savedEntity, entity);
-        savedEntity.ModifiedDate = DateTime.Now;
-        await _repository.Update(savedEntity);
-    }
+    public abstract Task Update(int id, T entity);
 
     public virtual async Task Remove(int id)
     {
@@ -55,7 +44,7 @@ public abstract class CRUDService<T> : ICRUDService<T> where T : IEntity
 
     public virtual Task<IEnumerable<T>> GetAll(int page, int limit)
     {
-        var pageable = new Pageable { Offset = --page * limit, Limit = limit };
+        var pageable = new Pageable { Offset = (page - 1) * limit, Limit = limit };
         return _repository.GetAll(pageable);
     }
 
@@ -63,6 +52,4 @@ public abstract class CRUDService<T> : ICRUDService<T> where T : IEntity
     {
         return _repository.Count();
     }
-
-    protected abstract void Update(T entity, T newEntity);
 }

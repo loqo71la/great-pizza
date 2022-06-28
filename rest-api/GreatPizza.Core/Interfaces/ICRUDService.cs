@@ -2,7 +2,7 @@
 
 namespace GreatPizza.Core.Interfaces;
 
-public interface ICRUDService<T> where T : IEntity
+public interface ICRUDService<T> where T : Entity
 {
     ValueTask<T> Get(int id);
     Task Add(T entity);

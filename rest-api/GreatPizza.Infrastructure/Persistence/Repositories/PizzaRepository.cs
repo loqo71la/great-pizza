@@ -45,17 +45,17 @@ public class PizzaRepository : IPizzaRepository
         await _gpContext.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<Pizza>> GetAll(Pageable pageable = null)
+    public Task<IEnumerable<Pizza>> GetAll(Pageable? pageable = null)
     {
         return GetAllWhere(pizza => true, pageable);
     }
 
-    public async Task<IEnumerable<Pizza>> GetAllWhere(Expression<Func<Pizza, bool>> predicate, Pageable pageable = null)
+    public async Task<IEnumerable<Pizza>> GetAllWhere(Expression<Func<Pizza, bool>> predicate, Pageable? pageable = null)
     {
         IQueryable<Pizza> queryable = _gpContext.Pizzas
             .Include(pizza => pizza.Toppings)
             .Where(predicate)
-            .OrderByDescending(pizza => pizza.CreatedDate);
+            .OrderByDescending(pizza => pizza.CreatedAt);
         if (pageable != null)
         {
             queryable = queryable

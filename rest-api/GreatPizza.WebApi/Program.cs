@@ -1,7 +1,6 @@
 using GreatPizza.Infrastructure;
 using GreatPizza.WebApi.Mappers;
 using GreatPizza.WebApi.Middlewares;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

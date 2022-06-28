@@ -43,17 +43,17 @@ public class ToppingRepository : IToppingRepository
         await _gpContext.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<Topping>> GetAll(Pageable pageable = null)
+    public Task<IEnumerable<Topping>> GetAll(Pageable? pageable)
     {
         return GetAllWhere(topping => true, pageable);
     }
 
     public async Task<IEnumerable<Topping>> GetAllWhere(Expression<Func<Topping, bool>> predicate,
-        Pageable pageable = null)
+        Pageable? pageable)
     {
         IQueryable<Topping> queryable = _gpContext.Toppings
             .Where(predicate)
-            .OrderByDescending(topping => topping.CreatedDate);
+            .OrderByDescending(topping => topping.CreatedAt);
         if (pageable != null)
         {
             queryable = queryable

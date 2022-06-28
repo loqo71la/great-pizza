@@ -17,6 +17,7 @@ public class ToppingControllerTest
     private readonly Mock<IToppingRepository> _mockToppingRepository;
     private readonly Mock<IPizzaRepository> _mockPizzaRepository;
     private readonly HttpClient _client;
+    private const Object _null = null;
 
     public ToppingControllerTest()
     {
@@ -41,12 +42,12 @@ public class ToppingControllerTest
         var emptyToppings = Array.Empty<Topping>();
         return new List<object[]>
         {
-            new object[] {"", 0, 1, 1, null, null, emptyToppings},
-            new object[] {"?limit=10&page=1", 0, 1, 1, null, null, emptyToppings},
-            new object[] {"", 4, 1, 1, null, null, toppings},
-            new object[] {"?limit=2", 4, 2, 1, "http://localhost/api/topping?page=2&limit=2", null, toppings},
+            new object[] {"", 0, 1, 1, _null, _null, emptyToppings},
+            new object[] {"?limit=10&page=1", 0, 1, 1, _null, _null, emptyToppings},
+            new object[] {"", 4, 1, 1, _null, _null, toppings},
+            new object[] {"?limit=2", 4, 2, 1, "http://localhost/api/topping?page=2&limit=2", _null, toppings},
             new object[]
-                {"?page=2&limit=2", 4, 2, 2, null, "http://localhost/api/topping?page=1&limit=2", toppings},
+                {"?page=2&limit=2", 4, 2, 2, _null, "http://localhost/api/topping?page=1&limit=2", toppings},
         };
     }
 
@@ -71,12 +72,12 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal(totalItems, pageDto.TotalItems);
-        Assert.Equal(totalPages, pageDto.TotalPages);
-        Assert.Equal(currentPage, pageDto.CurrentPage);
-        Assert.Equal(previous, pageDto.Previous);
-        Assert.Equal(next, pageDto.Next);
-        Assert.NotNull(pageDto.Items);
+        Assert.Equal(totalItems, pageDto?.TotalItems);
+        Assert.Equal(totalPages, pageDto?.TotalPages);
+        Assert.Equal(currentPage, pageDto?.CurrentPage);
+        Assert.Equal(previous, pageDto?.Previous);
+        Assert.Equal(next, pageDto?.Next);
+        Assert.NotNull(pageDto?.Items);
 
         _mockToppingRepository.Verify(repository => repository.GetAll(It.IsAny<Pageable>()), Times.Once);
         _mockToppingRepository.Verify(repository => repository.Count(), Times.Once);
@@ -98,8 +99,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Topping with ID [1] was not found.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Topping with ID [1] was not found.", responseDto?.Message);
         _mockToppingRepository.Verify(repository => repository.Get(1), Times.Once);
     }
 
@@ -112,7 +113,7 @@ public class ToppingControllerTest
             Id = 1,
             Name = "Peperoni",
             Price = 1.55m,
-            CreatedDate = new DateTime(2021, 7, 7, 0, 0, 0, DateTimeKind.Utc)
+            CreatedAt = new DateTime(2021, 7, 7, 0, 0, 0, DateTimeKind.Utc)
         };
         _mockToppingRepository.Setup(repository => repository.Get(1))
             .ReturnsAsync(topping);
@@ -127,10 +128,10 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal(1, toppingDto.Id);
-        Assert.Equal("Peperoni", toppingDto.Name);
-        Assert.Equal(1.55m, toppingDto.Price);
-        Assert.Equal("2021-07-07T00:00:00.000Z", toppingDto.CreatedDate);
+        Assert.Equal(1, toppingDto?.Id);
+        Assert.Equal("Peperoni", toppingDto?.Name);
+        Assert.Equal(1.55m, toppingDto?.Price);
+        Assert.Equal("2021-07-07T00:00:00.000Z", toppingDto?.CreatedDate);
         _mockToppingRepository.Verify(repository => repository.Get(1), Times.Once);
     }
 
@@ -156,8 +157,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("http://localhost/api/topping/1", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("http://localhost/api/topping/1", responseDto?.Message);
         _mockToppingRepository.Verify(
             repository => repository.GetWhere(It.IsAny<Expression<Func<Topping, bool>>>()),
             Times.Once);
@@ -182,8 +183,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Topping with name [Peperoni] already exist.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Topping with name [Peperoni] already exist.", responseDto?.Message);
         _mockToppingRepository.Verify(
             repository => repository.GetWhere(It.IsAny<Expression<Func<Topping, bool>>>()),
             Times.Once);
@@ -208,8 +209,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Error", responseDto.Status);
-        Assert.Equal("Topping with ID [1] was not found.", responseDto.Message);
+        Assert.Equal("Error", responseDto?.Status);
+        Assert.Equal("Topping with ID [1] was not found.", responseDto?.Message);
         _mockToppingRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.Update(It.IsAny<Topping>()), Times.Never);
     }
@@ -235,8 +236,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Topping with ID [1] was successfully updated.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Topping with ID [1] was successfully updated.", responseDto?.Message);
         _mockToppingRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.Update(It.IsAny<Topping>()), Times.Once);
     }
@@ -258,8 +259,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Topping with ID [1] was successfully removed.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Topping with ID [1] was successfully removed.", responseDto?.Message);
         _mockToppingRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.Remove(It.IsAny<Topping>()), Times.Never);
     }
@@ -283,8 +284,8 @@ public class ToppingControllerTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        Assert.Equal("Success", responseDto.Status);
-        Assert.Equal("Topping with ID [1] was successfully removed.", responseDto.Message);
+        Assert.Equal("Success", responseDto?.Status);
+        Assert.Equal("Topping with ID [1] was successfully removed.", responseDto?.Message);
         _mockToppingRepository.Verify(repository => repository.Get(1), Times.Once);
         _mockToppingRepository.Verify(repository => repository.Remove(It.IsAny<Topping>()), Times.Once);
     }

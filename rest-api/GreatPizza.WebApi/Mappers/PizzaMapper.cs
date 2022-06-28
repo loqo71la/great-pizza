@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using GreatPizza.Domain.Entities;
+﻿using GreatPizza.Domain.Entities;
 using GreatPizza.WebApi.DTOs;
 
 namespace GreatPizza.WebApi.Mappers;
 
-public class PizzaMapper : Mapper<PizzaDTO, Pizza>
+public class PizzaMapper : FoodMapper<PizzaDTO, Pizza>
 {
     private readonly ToppingMapper _toppingMapper;
 

@@ -3,7 +3,7 @@ using GreatPizza.WebApi.DTOs;
 
 namespace GreatPizza.WebApi.Mappers;
 
-public class ToppingMapper : Mapper<ToppingDTO, Topping>
+public class ToppingMapper : FoodMapper<ToppingDTO, Topping>
 {
     public override Topping ToEntity(ToppingDTO toppingDto)
     {

@@ -5,8 +5,8 @@ namespace GreatPizza.WebApi.DTOs;
 public class ResponseDTO
 {
     [JsonPropertyName("status")]
-    public string Status { get; set; }
+    public string? Status { get; set; }
 
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public string? Message { get; set; }
 }
