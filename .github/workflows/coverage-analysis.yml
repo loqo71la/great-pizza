@@ -30,7 +30,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: web-client-coverage
-          path: ./coverage/web-client/cobertura-coverage.xml
+          path: '**/cobertura-coverage.xml'
 
   rest-api-coverage:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: web-client-coverage
-          path: ./TestResults/**/coverage.cobertura.xml
+          path: '**/coverage.cobertura.xml'
 
   upload-to-codecov:
     needs: [web-client-coverage, rest-api-coverage]
