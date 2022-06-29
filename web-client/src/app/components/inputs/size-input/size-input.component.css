@@ -1,9 +1,0 @@
-.btn {
-    border-color: var(--gp-border);
-    width: 42px;
-    height: 42px;
-}
-
-.btn-active {
-    background-color: var(--gp-bg-select-item);
-}

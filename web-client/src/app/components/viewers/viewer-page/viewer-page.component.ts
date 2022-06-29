@@ -7,17 +7,12 @@ import { Topping } from 'src/app/shared/models/topping';
   templateUrl: './viewer-page.component.html',
   styleUrls: ['./viewer-page.component.css']
 })
-export class ViewerPageComponent<T> {
+export class ViewerPageComponent {
   @Output() actions = new EventEmitter<any>();
-  @Input() pageable: Pageable<T>;
+  @Input() pageable!: Pageable<any>;
 
   toStringSubItem(item: any) {
     return item.toppings?.map((topping: Topping) => topping.name).join(', ') || ' ';
-  }
-
-  loadSubTotal(item: any): number {
-      return item.toppings?.map(topping => topping.price)
-      .reduce((first, second) => first + second, 0) || 0;
   }
 
   loadTotal(item: any): number {
@@ -28,15 +23,16 @@ export class ViewerPageComponent<T> {
     return item.toppings?.length || 0 > 0;
   }
 
-  getLastModified(pizza: any) {
-    return pizza.modifiedDate ? pizza.modifiedDate : pizza.createdDate;
+  getLastModified(item: any): Date {
+    return item.modifiedDate ? item.modifiedDate : item.createdDate;
   }
 
-  edit(index: number): void {
-    this.actions.emit({ action: 'edit', index })
+  open(item: any): void {
+    this.actions.emit({ action: 'open', item })
   }
 
-  delete(index: number): void {
-    this.actions.emit({ action: 'delete', index })
+  private loadSubTotal(item: any): number {
+    return item.toppings?.map((topping: any) => topping.price)
+      .reduce((first: number, second: number) => first + second, 0) || 0;
   }
 }

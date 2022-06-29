@@ -1,12 +1,14 @@
-.container-item {
+.btn {
     background-color: var(--gp-bg-select-item);
-    border-color: var(--gp-border);
-    border-style: solid;
-    border-radius: 10%;
-    border-width: 1px;
-    padding: 2px 0px;
+    border-radius: 0.5rem;
 }
 
-i.bi {
-    color: var(--gp-bg-button-card);
+.selected-item {
+    background-color: var(--gp-bg-select-pressed-item);
+    border-color: var(--gp-border-select-item);
+}
+
+span.position-absolute {
+    transform: translate(-65%,-35%);
+    color: var(--gp-bg-btn-primary);
 }

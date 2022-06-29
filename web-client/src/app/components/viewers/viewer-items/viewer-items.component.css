@@ -1,19 +1,4 @@
-button {
-    width: 42px;
-    height: 42px;
-    padding: 4px;
-    border-color: var(--gp-border);
-    border-style: solid;
-    border-radius: 50%;
-    border-width: 1px;
-}
-
-.btn-main {
-    background-color: var(--gp-bg-button-card) !important;
-    color: white !important;
-}
-
-.btn-main:hover {
-    background-color: var(--gp-bg-button-card-hover) !important;
-    color: white;
+.btn-light {
+    width: 28px;
+    height: 28px;
 }

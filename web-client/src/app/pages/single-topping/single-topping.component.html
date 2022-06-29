@@ -1,0 +1,36 @@
+<ng-container *ngIf="topping; else loading">
+  <form class="card p-3 mt-3" (ngSubmit)="submit()" [formGroup]="form">
+    <div class="d-flex align-items-center gap-2">
+      <button type="button" class="btn btn-light p-0" (click)="cancel()">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <h4 class="flex-grow-1 m-0">{{topping.id ? 'Update': 'Create'}} Topping</h4>
+      <button *ngIf="topping.id" type="button" class="btn btn-outline-danger p-0" (click)="delete()">
+        <i class="bi bi-trash2-fill" *ngIf="!isDeleteLoading; else buttonLoading"></i>
+      </button>
+    </div>
+    <gp-input label="Name" type="text" [control]="getControl('name')"></gp-input>
+    <gp-input label="Price" type="price" [control]="getControl('price')"></gp-input>
+    <gp-input label="Type" type="select-item" [control]="getControl('type')" [headers]="toppingHeaders"></gp-input>
+
+    <hr class="my-3">
+    <div class="d-flex justify-content-center gap-2">
+      <button class="btn btn-primary px-4" [disabled]="form.invalid">
+        <i class="bi bi-cloud-check-fill" *ngIf="!isSubmitLoading; else buttonLoading"></i>
+        <span class="ms-2">Save</span>
+      </button>
+      <button type="button" class="btn btn-danger px-4" (click)="cancel()">
+        <i class="bi bi-x-circle-fill me-2"></i>Cancel
+      </button>
+    </div>
+  </form>
+</ng-container>
+
+<ng-template #buttonLoading>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden">Loading...</span>
+</ng-template>
+
+<ng-template #loading>
+  <gp-loader></gp-loader>
+</ng-template>

@@ -1,11 +1,11 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:23075",
-      "sslPort": 44333
+      "applicationUrl": "http://localhost:55131",
+      "sslPort": 44313
     }
   },
   "profiles": {
@@ -19,7 +19,7 @@
     },
     "GreatPizza.WebApi": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
