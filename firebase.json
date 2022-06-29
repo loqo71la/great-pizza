@@ -1,12 +1,17 @@
 {
-    "hosting": {
-      "public": "./web-client/dist/web-client",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**",
-        "rest-api/**"
-      ]
-    }
+  "hosting": {
+    "public": "./web-client/dist/web-client",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "rest-api/**"
+    ]
   }
-  
+}
