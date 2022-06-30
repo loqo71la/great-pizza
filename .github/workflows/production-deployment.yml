@@ -50,9 +50,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Database connection
+      - name: Setup default connection
         run: |
           sed -i -E "s/DefaultConnection\": \".+\"/DefaultConnection\": \"${{ secrets.DB_CONNECTION }}\"/" ./GreatPizza.Infrastructure/appsettings.json
+          sed -i -E "s/WebClientOrigin\": \".+\"/WebClientOrigin\": \"${{ secrets.WEB_CLIENT_ORIGIN }}\"/" ./GreatPizza.WebApi/appsettings.json
 
       - name: Docker login
         run: echo ${{ secrets.HEROKU_API_KEY }} | docker login -u _ --password-stdin registry.heroku.com

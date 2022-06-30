@@ -3,13 +3,14 @@ using GreatPizza.WebApi.Mappers;
 using GreatPizza.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+var origin = builder.Configuration.GetValue<string>("WebClientOrigin");
 
 builder.Services.AddControllers();
 builder.Services.AddServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:4200")
+    options.AddDefaultPolicy(builder => builder.WithOrigins(origin)
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials());
