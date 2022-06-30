@@ -1,16 +1,12 @@
-# Great Pizza
-Application to manage a menu of pizzas and toppings using ASP.NET core and Angular.
+# GreatPizza
+[![codecov](
+https://img.shields.io/badge/GreatPizza-4E69C8?labelColor=4E69C8&amp;logo=Firefox&amp;)](https://great-pizza.loqo71la.dev)
+![Unit Test](https://github.com/loqo71la/great-pizza/actions/workflows/coverage-analysis.yml/badge.svg)
+[![codecov](https://codecov.io/gh/loqo71la/great-pizza/branch/main/graph/badge.svg?token=23X64UH813)](https://codecov.io/gh/loqo71la/great-pizza)
 
-## Prerequisites
-- [Docker](https://docs.docker.com/engine/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Run the App
-To run the app execute the following command:
-```
-docker-compose up -d
-```
-At this time, you have a service running at [http://localhost:4200](http://localhost:4200)
+It is an application that allows you to create personalized pizza menus, register new toppings and share them among other users.
+
 # For Developers
 ## Prerequisites
 - [Net Core](https://dotnet.microsoft.com/download)
