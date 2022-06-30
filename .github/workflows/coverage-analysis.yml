@@ -1,4 +1,4 @@
-name: Workflow for Coverage Analysis
+name: Coverage Analysis
 
 on:
   pull_request:

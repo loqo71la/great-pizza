@@ -1,5 +1,4 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-ARG DefaultConnection
 
 WORKDIR /source
 COPY ["GreatPizza.sln", "./"]
@@ -15,11 +14,11 @@ COPY . .
 WORKDIR /source/GreatPizza.WebApi
 RUN dotnet publish -c Release -o /gp-rest-api
 
-COPY ["*.Infrastructure/*.json", "/gp-rest-api/GreatPizza.Infrastructure/"]
-RUN [ -z "$DefaultConnection" ] || sed -i -E "s/DefaultConnection\": \".+\"/DefaultConnection\": \"${DefaultConnection}\"/" /gp-rest-api/GreatPizza.Infrastructure/appsettings.json
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
+EXPOSE 443
+EXPOSE 80
+
 WORKDIR /gp-rest-api
 COPY --from=build-env /gp-rest-api .
 
-ENTRYPOINT ["dotnet", "GreatPizza.WebApi.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet GreatPizza.WebApi.dll

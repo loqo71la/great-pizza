@@ -1,0 +1,59 @@
+name: Production Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-client-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web-client
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup REST API conneciton
+        run: sed -i -E "s/url: '.+'/url: '${REST_API_CONNECTION}'/" ./src/environments/environment.prod.ts
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GREAT_PIZZA_LOQO71LA }}'
+          channelId: live
+          projectId: great-pizza-loqo71la
+
+ rest-api-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rest-api/GreatPizza.WebApi
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Database conneciton
+        run: sed -i -E "s/DefaultConnection\": \".+\"/DefaultConnection\": \"${DB_CONNECTION}\"/" ../GreatPizza.Infrastructure/appsettings.json
+
+      - name: Docker login
+        run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+
+      - name: Build Docker image
+        run: heroku container:push web -a great-pizza
+
+      - name: Deploy to Heroku
+        run: heroku container:release web -a great-pizza
