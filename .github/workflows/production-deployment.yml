@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
 jobs:
   web-client-deploy:
     runs-on: ubuntu-latest
@@ -23,8 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Setup REST API conneciton
-        run: sed -i -E "s/url: '.+'/url: '${REST_API_CONNECTION}'/" ./src/environments/environment.prod.ts
+      - name: Setup REST API connection
+        run: |
+          sed -i -E "s/url: '.+'/url: '${{ secrets.REST_API_CONNECTION }}'/" ./src/environments/environment.prod.ts
 
       - name: Build project
         run: npm run build
@@ -37,20 +41,21 @@ jobs:
           channelId: live
           projectId: great-pizza-loqo71la
 
- rest-api-deploy:
+  rest-api-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rest-api/GreatPizza.WebApi
+        working-directory: ./rest-api
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Database conneciton
-        run: sed -i -E "s/DefaultConnection\": \".+\"/DefaultConnection\": \"${DB_CONNECTION}\"/" ../GreatPizza.Infrastructure/appsettings.json
+      - name: Setup Database connection
+        run: |
+          sed -i -E "s/DefaultConnection\": \".+\"/DefaultConnection\": \"${{ secrets.DB_CONNECTION }}\"/" ./GreatPizza.Infrastructure/appsettings.json
 
       - name: Docker login
-        run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+        run: echo ${{ secrets.HEROKU_API_KEY }} | docker login -u _ --password-stdin registry.heroku.com
 
       - name: Build Docker image
         run: heroku container:push web -a great-pizza
