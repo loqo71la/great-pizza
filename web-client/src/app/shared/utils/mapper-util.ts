@@ -9,11 +9,15 @@ export abstract class MapperUtil {
       name: item.name,
       size: item.size,
       type: item.type,
-      price: item.price,
-      toppings: item.toppings?.map(MapperUtil.toTopping)
+      ratings: item.ratings,
+      price: Number(item.price),
+      rating: Number(item.rating),
+      toppings: item.toppings || '',
+      toppingPrice: item.toppingPrice,
+      toppingDetail: item.toppingDetail
     };
-    if (item.createdDate) pizza.createdDate = new Date(item.createdDate);
-    if (item.modifiedDate) pizza.modifiedDate = new Date(item.modifiedDate);
+    if (item.createdAt) pizza.createdDate = new Date(item.createdAt);
+    if (item.updatedAt) pizza.modifiedDate = new Date(item.updatedAt);
     return pizza
   }
 
@@ -24,8 +28,8 @@ export abstract class MapperUtil {
       type: item.type,
       price: item.price,
     };
-    if (item.createdDate) topping.createdDate = new Date(item.createdDate);
-    if (item.modifiedDate) topping.modifiedDate = new Date(item.modifiedDate);
+    if (item.createdAt) topping.createdDate = new Date(item.createdAt);
+    if (item.updatedAt) topping.modifiedDate = new Date(item.updatedAt);
     return topping
   }
 }

@@ -1,0 +1,16 @@
+<main class="d-flex flex-column vh-100">
+  <div class="container flex-grow-1 d-flex justify-content-center align-items-center">
+    <section class="card gap-2 p-4">
+      <p class="mb-0">Welcome to <span class="text-danger fw-bold">Great</span><span class="fw-bold">Pizza</span></p>
+      <img src="../../../assets/gp.png" alt="logo">
+      <button type="button" class="btn btn-primary px-5" (click)="signInWithGoogle()">
+        <i class="bi bi-google"></i>
+        Sing in with Google
+      </button>
+      <button type="button" class="btn btn-dark px-5" (click)="signInWithGithub()">
+        <i class="bi bi-github"></i>
+        Sing in with Github
+      </button>
+    </section>
+  </div>
+</main>

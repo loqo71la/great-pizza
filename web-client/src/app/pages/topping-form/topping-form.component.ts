@@ -7,15 +7,16 @@ import { DataUtil } from 'src/app/shared/utils/data-util';
 import { Topping } from 'src/app/shared/models/topping';
 import { ToppingService } from 'src/app/services/topping.service';
 import { Selectable } from 'src/app/shared/models/selectable';
+import { Location } from '@angular/common';
 
 type Control = 'name' | 'price' | 'type';
 
 @Component({
-  selector: 'gp-single-topping',
-  templateUrl: './single-topping.component.html',
-  styleUrls: ['./single-topping.component.css']
+  selector: 'gp-topping-form',
+  templateUrl: './topping-form.component.html',
+  styleUrls: ['./topping-form.component.css']
 })
-export class SingleToppingComponent implements OnInit {
+export class ToppingFormComponent implements OnInit {
   toppingHeaders: Selectable[] = DataUtil.buildHeaders('toppings');
   isSubmitLoading: boolean = false;
   isDeleteLoading: boolean = false;
@@ -26,13 +27,14 @@ export class SingleToppingComponent implements OnInit {
   constructor(private toppingService: ToppingService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private location: Location,
     private router: Router) { }
 
   ngOnInit(): void {
     this.loadData();
 
     const toppingId = this.route.snapshot.paramMap.get('toppingId');
-    if (toppingId === 'create') {
+    if (!toppingId) {
       this.topping = { ...this.form.value, id: 0 };
       return;
     }
@@ -60,16 +62,22 @@ export class SingleToppingComponent implements OnInit {
 
     this.isDeleteLoading = true;
     this.toppingService.delete(this.topping.id)
-      .subscribe(_ => {
-        this.isDeleteLoading = false;
-        this.cancel();
+      .subscribe({
+        next: _ => {
+          this.isDeleteLoading = false;
+          this.cancel();
+        },
+        error: (response: any) => {
+          alert(response.error.message ?? environment.api.error);
+          this.isDeleteLoading = false;
+        }
       });
   }
 
   submit(): void {
     const next = (_: any) => {
       this.isSubmitLoading = false;
-      this.cancel();
+      this.router.navigate(['toppings']);
     };
     const error = (response: any) => {
       alert(response.error.message ?? environment.api.error);
@@ -83,7 +91,7 @@ export class SingleToppingComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['toppings']);
+    this.location.back();
   }
 
   private loadData(): void {

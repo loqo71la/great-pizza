@@ -2,3 +2,12 @@
     width: 28px;
     height: 28px;
 }
+
+.form-select {
+    padding: .15rem 2.5rem .15rem .5rem;
+    width: fit-content;
+}
+
+.sort {
+    font-size: 1.25rem;
+}

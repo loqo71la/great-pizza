@@ -8,6 +8,35 @@ div.card:hover {
     cursor: pointer;
 }
 
+.topping-rating {
+    font-size: .8rem;
+    text-align: end;
+    margin: 0rem;
+}
+
+.topping-rating i {
+    color: var(--gp-bg-btn-rating);
+}
+
+.price-detail {
+    visibility: hidden;
+    text-align: end;
+    margin-bottom: 0rem;
+    font-size: .75rem;
+    margin-top: -0.2rem;
+}
+
+.price-detail span:first-child {
+    background-color: grey;
+    padding: .05rem .25rem;
+    border-radius: .25rem;
+    color: white;
+}
+
+div.card:hover .price-detail {
+    visibility: visible;
+}
+
 sup.badge {
     padding: 0.15rem 0.25rem;
     font-size: 0.65rem;

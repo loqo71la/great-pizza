@@ -11,12 +11,20 @@
             {{item.name}}
             <sup class="badge bg-secondary" *ngIf="item.size">{{item.size}}</sup>
           </h5>
-          <p *ngIf="hasSubItem(item)" class="small mb-0 text-truncate">{{toStringSubItem(item)}}</p>
-          <p class="small mb-0 text-muted">{{getLastModified(item) | date: 'MMM d, y, h:mm a'}}</p>
+          <p *ngIf="item.toppingDetail" class="small mb-0 text-truncate">{{item.toppingDetail}}</p>
+          <p class="small mb-0 text-muted">{{item.modifiedDate | date: 'MMM d, y, h:mm a'}}</p>
         </div>
 
         <div class="col-3 text-center">
-          <p class="fs-4 mb-0">${{loadTotal(item) | number: '.2'}}</p>
+          <p *ngIf="item.rating !== undefined" class="topping-rating">
+            <i class="bi bi-star-fill"></i>
+            {{item.rating}}
+          </p>
+          <p class="fs-4 mb-0 text-end">${{loadTotal(item) | number: '.2'}}</p>
+          <p class="price-detail">
+            <span>{{item.price}}</span>
+            <span *ngIf="item.toppingPrice">+{{item.toppingPrice}}</span>
+          </p>
         </div>
       </div>
     </div>

@@ -1,3 +1,36 @@
 .navbar-toggler {
     color: var(--gp-text-dark);
+    border-radius: 1.5rem;
+    padding: .35rem .4rem;
+}
+
+.avatar {
+    border-color: var(--gp-bg-btn-light);
+    padding: 0rem;
+}
+
+.avatar img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1.5rem;
+}
+
+.btn-outline-secondary {
+    color: var(--gp-text-dark);
+    border-color: var(--gp-bg-btn-light);
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+}
+
+.dropdown-item a {
+    text-decoration: none;
+    color: var(--gp-text-primary);
+}
+
+.dropdown-item.active {
+    background-color: var(--gp-bg-btn-primary);
+}
+
+p small {
+    font-size: .75rem;
 }

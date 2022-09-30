@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { Menu } from 'src/app/shared/models/menu';
+import { User } from 'src/app/shared/models/user';
 
 const DefaultMenus = [
   { url: '/pizzas', name: 'Pizzas', selected: false },
@@ -12,22 +14,23 @@ const DefaultMenus = [
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  isCollapsed: boolean = false;
+  user: User | null = null;
   menus: Menu[];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     this.menus = DefaultMenus;
   }
 
   ngOnInit() {
+    this.authService.getUserListener().subscribe(user => this.user = user );
     this.loadMenu(this.router.url);
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) this.loadMenu(val.urlAfterRedirects);
     });
   }
 
-  collapse(value: boolean = false): void {
-    this.isCollapsed = value;
+  signOut(): void {
+    this.authService.signOut();
   }
 
   private loadMenu(url: string) {

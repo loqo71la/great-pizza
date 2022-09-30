@@ -1,15 +1,48 @@
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand" [routerLink]="['/']"><span class="text-danger fw-bold">Great</span>Pizza</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-      aria-controls="navbarMenu" [attr.aria-expanded]="isCollapsed" (click)="collapse(!isCollapsed)">
-      <i class="bi bi-list"></i>
-    </button>
-    <div class="navbar-collapse collapse" [ngClass]="{ 'show': isCollapsed }" id="navbarMenu">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngFor="let menu of menus">
-          <a class="nav-link" [ngClass]="{'active': menu.selected}" [routerLink]="menu.url"
-            (click)="collapse()">{{menu.name}}</a>
+  <div class="container gap-2">
+    <a class="navbar-brand" [routerLink]="['/']">
+      <span class="text-danger fw-bold">Great</span>Pizza
+    </a>
+
+    <section class="flex-grow-1">
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item" *ngFor="let menu of menus">
+            <a class="nav-link" [ngClass]="{'active': menu.selected}" [routerLink]="menu.url">{{menu.name}}</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="dropdown" *ngIf="user; else login">
+      <button class="btn avatar" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img [src]="user.image" alt="Avatar">
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-item-text opacity-75">
+          <p class="mb-0">{{user.name}}</p>
+          <p class="mb-0"><small>{{user.email}}</small></p>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li>
+          <a class="dropdown-item" routerLink="/" (click)="signOut()">Sign Out</a>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #login>
+      <button type="button" class="btn btn-outline-secondary" routerLink="/login" >Sign In</button>
+    </ng-template>
+
+    <div class="dropdown">
+      <button class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li *ngFor="let menu of menus">
+          <a [routerLink]="menu.url" class="dropdown-item" [ngClass]="{'active': menu.selected}">{{menu.name}}</a>
         </li>
       </ul>
     </div>

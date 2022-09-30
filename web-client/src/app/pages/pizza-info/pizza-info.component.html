@@ -1,0 +1,78 @@
+<ng-container *ngIf="pizza; else loading">
+  <div class="card p-3 mt-3">
+    <div class="d-flex align-items-center gap-2">
+      <button type="button" class="btn btn-light p-0" (click)="cancel()">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <h4 class="flex-grow-1 m-0">Pizza Info</h4>
+      <button type="button" class="btn btn-outline-primary p-0" routerLink="update">
+        <i class="bi bi-pencil-fill"></i>
+      </button>
+      <button type="button" class="btn btn-outline-danger p-0" (click)="delete()">
+        <i class="bi bi-trash2-fill" *ngIf="!isDeleteLoading; else buttonLoading"></i>
+      </button>
+    </div>
+    <section class="d-flex flex-column flex-sm-row gap-3 mt-3">
+      <div class="col d-flex gap-3">
+        <div [class]="pizza.type"></div>
+        <div>
+          <div class="d-flex flex-column flex-sm-row gap-sm-2">
+            <h1>{{pizza.rating}}</h1>
+            <div>
+              <button *ngFor="let rating of ratings; index as i" class="btn btn-outline-warning" (click)="rate(i)"
+                [disabled]="isDisableRating">
+                <i class="bi bi-star-fill" *ngIf="!rating.selected; else buttonLoading"></i>
+              </button>
+              <p class="mb-0 ms-1 small">{{totalRating}} reviews</p>
+            </div>
+          </div>
+          <p class="mb-0">{{totalPercentage}}% recomended</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex align-items-center gap-1" *ngFor="let rating of ratings.reverse();">
+          <span class="rating-left">{{rating.id}}</span>
+          <div class="progress flex-grow-1">
+            <div class="progress-bar bg-secondary" [style]="rating.style"></div>
+          </div>
+          <span class="rating-right">{{rating.value | number:'1.0-2'}}%</span>
+        </div>
+      </div>
+    </section>
+    <section class="row row-cols-md-2 mt-2 px-2">
+      <p class="mb-1"><label class="d-block fw-bold small">Name</label>{{pizza.name}}</p>
+      <p class="mb-1"><label class="d-block fw-bold small">Size</label>{{pizza.size}}</p>
+      <p class="mb-1">
+        <label class="d-block fw-bold small">Price</label>
+        {{pizza.price | number:'.2'}}
+        <span *ngIf="totalToppingPrice"> + {{totalToppingPrice | number:'.2'}} = </span>
+        <span *ngIf="totalToppingPrice" class="total-price">{{pizza.price + totalToppingPrice | number:'.2'}}</span>
+      </p>
+      <p class="mb-1">
+        <label class="d-block fw-bold small">Created Date</label>{{pizza.createdDate | date: 'MMM d, y, h:mm a'}}
+      </p>
+      <p class="mb-1">
+        <label class="d-block fw-bold small">Last Update</label>{{pizza.modifiedDate | date: 'MMM d, y, h:mm a'}}
+      </p>
+    </section>
+    <p class="mb-1 fw-bold small" *ngIf="pizza.toppings?.length">Toppings</p>
+    <section class="d-flex flex-wrap gap-2">
+      <div class="card flex-row gap-2 px-2 py-1" *ngFor="let topping of pizza.toppings">
+        <div class="mx-auto" [ngClass]="topping.type"></div>
+        <div>
+          <p class="mb-0">{{topping.name}}</p>
+          <p class="mb-0 small">${{topping.price | number: '.2'}}</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</ng-container>
+
+<ng-template #buttonLoading>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden">Loading...</span>
+</ng-template>
+
+<ng-template #loading>
+  <gp-loader></gp-loader>
+</ng-template>
