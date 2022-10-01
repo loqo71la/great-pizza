@@ -1,31 +1,34 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { PizzaComponent } from './pizza.component';
+import { PizzaListComponent } from './pizza-list.component';
 import { PizzaService } from 'src/app/services/pizza.service';
 import { EMPTY } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
-describe('PizzaComponent', () => {
-  let component: PizzaComponent;
-  let fixture: ComponentFixture<PizzaComponent>;
+describe('PizzaListComponent', () => {
+  let component: PizzaListComponent;
+  let fixture: ComponentFixture<PizzaListComponent>;
 
   const routerMock = jasmine.createSpyObj('Router', ['navigate']);
   const serviceMock = jasmine.createSpyObj('PizzaService', ['getAll']);
+  const sort = environment.sorters.pizzas[0].id;
+  const limit = environment.api.limit;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PizzaComponent ],
+      declarations: [PizzaListComponent],
       providers: [
         { provide: PizzaService, useValue: serviceMock },
         { provide: Router, useValue: routerMock }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
-    serviceMock.getAll.withArgs(1).and.returnValue(EMPTY);
-    fixture = TestBed.createComponent(PizzaComponent);
+    serviceMock.getAll.withArgs(1, limit, sort).and.returnValue(EMPTY);
+    fixture = TestBed.createComponent(PizzaListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -33,14 +36,14 @@ describe('PizzaComponent', () => {
 
   it('should call to PizzaService when it is created with page "1" by default', () => {
     expect(component).toBeTruthy();
-    expect(serviceMock.getAll).toHaveBeenCalledWith(1);
+    expect(serviceMock.getAll).toHaveBeenCalledWith(1, limit, sort);
   });
 
   it('#loadPizzas should call to PizzaService specific page "3"', () => {
-    serviceMock.getAll.withArgs(3).and.returnValue(EMPTY);
+    serviceMock.getAll.withArgs(3, limit, sort).and.returnValue(EMPTY);
 
-    component.loadPizzas(3);
-    expect(serviceMock.getAll).toHaveBeenCalledWith(3);
+    component.loadPizzas({ page: 3, sort });
+    expect(serviceMock.getAll).toHaveBeenCalledWith(3, limit, sort);
   });
 
   it('#onActions should navigate to ["pizzas", "create"] with "add" action', () => {

@@ -1,0 +1,14 @@
+svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: gray;
+}
+
+.text-decoration-none {
+    color: gray;
+}
+
+svg:hover, .text-decoration-none:hover {
+    fill: var(--gp-bg-btn-primary);
+    color: var(--gp-bg-btn-primary);
+}

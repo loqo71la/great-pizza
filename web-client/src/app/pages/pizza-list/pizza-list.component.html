@@ -1,6 +1,6 @@
 <ng-container *ngIf="pizzaPage | async as page; else loading">
-  <gp-viewer-items name="Pizza" [pageable]="page" (actions)="onActions($event)" (selectedPage)="loadPizzas($event)">
-  </gp-viewer-items>
+  <gp-viewer-items name="Pizza" [pageable]="page" (actions)="onActions($event)" (selectedPage)="loadPizzas($event)"
+    [sorters]="sorters" [sort]="sort"></gp-viewer-items>
   <gp-viewer-page [pageable]="page" (actions)="onActions($event)"></gp-viewer-page>
 </ng-container>
 

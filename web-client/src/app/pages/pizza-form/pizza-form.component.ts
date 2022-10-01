@@ -10,15 +10,16 @@ import { PizzaService } from 'src/app/services/pizza.service';
 import { Topping } from 'src/app/shared/models/topping';
 import { ToppingService } from 'src/app/services/topping.service';
 import { Selectable } from 'src/app/shared/models/selectable';
+import { Location } from '@angular/common';
 
 type Control = 'name' | 'price' | 'type' | 'size' | 'toppings';
 
 @Component({
-  selector: 'gp-single-pizza',
-  templateUrl: './single-pizza.component.html',
-  styleUrls: ['./single-pizza.component.css']
+  selector: 'gp-pizza-form',
+  templateUrl: './pizza-form.component.html',
+  styleUrls: ['./pizza-form.component.css']
 })
-export class SinglePizzaComponent implements OnInit {
+export class PizzaFormComponent implements OnInit {
   pizzaHeaders: Selectable[] = DataUtil.buildHeaders('pizzas');
   sizeHeaders: Selectable[] = DataUtil.buildHeaders('sizes');
   toppingHeaders: Selectable[] = [];
@@ -33,6 +34,7 @@ export class SinglePizzaComponent implements OnInit {
     private toppingService: ToppingService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private location: Location,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -40,7 +42,7 @@ export class SinglePizzaComponent implements OnInit {
     this.loadTopping();
 
     const pizzaId = this.route.snapshot.paramMap.get('pizzaId');
-    if (pizzaId === 'create') {
+    if (!pizzaId) {
       this.pizza = { ...this.form.value, id: 0 };
       return;
     }
@@ -69,14 +71,20 @@ export class SinglePizzaComponent implements OnInit {
 
     this.isDeleteLoading = true;
     this.pizzaService.delete(this.pizza.id)
-      .subscribe(_ => {
-        this.isDeleteLoading = false;
-        this.cancel();
+      .subscribe({
+        next: _ => {
+          this.isDeleteLoading = false;
+          this.cancel();
+        },
+        error: (response: any) => {
+          alert(response.error.message ?? environment.api.error);
+          this.isDeleteLoading = false;
+        }
       });
   }
 
   loadTopping(page: number = 1): void {
-    this.toppingService.getAll(page)
+    this.toppingService.getAll(page, environment.api.limit, environment.sorters.toppings[0].id)
       .subscribe(toppingPage => {
         this.toppingPage = toppingPage;
         this.toppingHeaders = toppingPage.items.map(topping =>
@@ -93,9 +101,11 @@ export class SinglePizzaComponent implements OnInit {
     const next = (response: any) => {
       if (this.pizza.toppings) {
         this.pizzaService.assign(this.findPizzaId(response), this.form.value.toppings)
-          .subscribe(_ => this.cancel());
-      }
-      this.isSubmitLoading = false;
+          .subscribe(_ => {
+            this.isSubmitLoading = false;
+            this.router.navigate(['pizzas']);
+          });
+      } else this.isSubmitLoading = false;
     };
 
     this.isSubmitLoading = true;
@@ -105,13 +115,11 @@ export class SinglePizzaComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['pizzas']);
+    this.location.back();
   }
 
-  private findPizzaId(response: any): number {
-    if (this.pizza.id) return this.pizza.id;
-    const match = response.message.match(/.+pizza\/(?<pizzaId>\d+)/);
-    return match.groups['pizzaId'] || 0;
+  private findPizzaId(response: any): string {
+    return this.pizza.id ? this.pizza.id : response.id;
   }
 
   private loadData(): void {

@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router, RouterEvent } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 import { HeaderComponent } from './header.component';
 
@@ -9,6 +10,7 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
+  const authServiceMock = jasmine.createSpyObj('AuthService', ['getUserListener', 'signOut']);
   const eventSubject = new ReplaySubject<RouterEvent>();
   const routerMock = {
     navigate: jasmine.createSpy('navigate'),
@@ -20,18 +22,20 @@ describe('HeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent],
       providers: [
-        { provide: Router, useValue: routerMock }
+        { provide: Router, useValue: routerMock },
+        { provide: AuthService, useValue: authServiceMock }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
+    authServiceMock.getUserListener.and.returnValue(new BehaviorSubject(null));
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-  
+
   it('should be created with 2 menus ["Pizzas", "Toppings"] by default', () => {
     expect(component).toBeTruthy();
 

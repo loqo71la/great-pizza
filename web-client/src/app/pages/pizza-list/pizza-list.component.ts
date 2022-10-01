@@ -8,21 +8,24 @@ import { Pizza } from 'src/app/shared/models/pizza';
 import { PizzaService } from 'src/app/services/pizza.service';
 
 @Component({
-  selector: 'gp-pizza',
-  templateUrl: './pizza.component.html',
-  styleUrls: ['./pizza.component.css']
+  selector: 'gp-pizza-list',
+  templateUrl: './pizza-list.component.html',
+  styleUrls: ['./pizza-list.component.css']
 })
-export class PizzaComponent implements OnInit {
+export class PizzaListComponent implements OnInit {
   pizzaPage!: Observable<Pageable<Pizza>>;
+  sorters = environment.sorters.pizzas;
+  sort = this.sorters[0].id;
 
   constructor(private pizzaService: PizzaService, private router: Router) { }
 
   ngOnInit(): void {
-    this.loadPizzas();
+    this.loadPizzas({ page: 1, sort: this.sort });
   }
 
-  loadPizzas(page: number = 1): void {
-    this.pizzaPage = this.pizzaService.getAll(page)
+  loadPizzas(data: any): void {
+    this.sort = data.sort;
+    this.pizzaPage = this.pizzaService.getAll(data.page, environment.api.limit, data.sort)
       .pipe(catchError(response => {
         alert(response.error.message ?? environment.api.error);
         return of({ currentPage: 1, totalPages: 1, totalItems: 0, items: [] });

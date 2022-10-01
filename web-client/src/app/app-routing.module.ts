@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
-import { PizzaComponent } from './pages/pizza/pizza.component';
-import { SinglePizzaComponent } from './pages/single-pizza/single-pizza.component';
-import { SingleToppingComponent } from './pages/single-topping/single-topping.component';
-import { ToppingComponent } from './pages/topping/topping.component';
+import { LoginComponent } from './pages/login/login.component';
+import { PizzaFormComponent } from './pages/pizza-form/pizza-form.component';
+import { PizzaInfoComponent } from './pages/pizza-info/pizza-info.component';
+import { PizzaListComponent } from './pages/pizza-list/pizza-list.component';
+import { ToppingFormComponent } from './pages/topping-form/topping-form.component';
+import { ToppingInfoComponent } from './pages/topping-info/topping-info.component';
+import { ToppingListComponent } from './pages/topping-list/topping-list.component';
 
 import { InputComponent } from './components/inputs/input/input.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -18,6 +23,8 @@ import { ViewerItemsComponent } from './components/viewers/viewer-items/viewer-i
 import { ViewerPageComponent } from './components/viewers/viewer-page/viewer-page.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { environment } from 'src/environments/environment';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -25,11 +32,19 @@ const routes: Routes = [
     component: HomeComponent,
     children: [
       { path: '', redirectTo: '/pizzas', pathMatch: 'full' },
-      { path: 'pizzas', component: PizzaComponent },
-      { path: 'pizzas/:pizzaId', component: SinglePizzaComponent },
-      { path: 'toppings', component: ToppingComponent },
-      { path: 'toppings/:toppingId', component: SingleToppingComponent }
+      { path: 'pizzas', component: PizzaListComponent },
+      { path: 'pizzas/create', component: PizzaFormComponent, canActivate: [AuthGuard] },
+      { path: 'pizzas/:pizzaId', component: PizzaInfoComponent },
+      { path: 'pizzas/:pizzaId/update', component: PizzaFormComponent, canActivate: [AuthGuard] },
+      { path: 'toppings', component: ToppingListComponent },
+      { path: 'toppings/create', component: ToppingFormComponent, canActivate: [AuthGuard] },
+      { path: 'toppings/:toppingId', component: ToppingInfoComponent },
+      { path: 'toppings/:toppingId/update', component: ToppingFormComponent, canActivate: [AuthGuard] }
     ]
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   }
 ];
 
@@ -39,7 +54,9 @@ const routes: Routes = [
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth())
   ],
   exports: [RouterModule],
   declarations: [
@@ -47,15 +64,20 @@ const routes: Routes = [
     HomeComponent,
     InputComponent,
     PaginationComponent,
-    PizzaComponent,
+    PizzaFormComponent,
+    PizzaInfoComponent,
+    PizzaListComponent,
     SelectedInputComponent,
-    SinglePizzaComponent,
-    SingleToppingComponent,
-    ToppingComponent,
+    ToppingFormComponent,
+    ToppingInfoComponent,
+    ToppingListComponent,
     ViewerItemsComponent,
     ViewerPageComponent,
     LoaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoginComponent,
+    PizzaInfoComponent,
+    ToppingInfoComponent
   ]
 })
 export class AppRoutingModule { }

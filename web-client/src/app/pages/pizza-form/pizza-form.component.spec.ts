@@ -4,37 +4,43 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, of } from 'rxjs';
 
 import { PizzaService } from 'src/app/services/pizza.service';
-import { SinglePizzaComponent } from './single-pizza.component';
+import { PizzaFormComponent } from './pizza-form.component';
 import { ToppingService } from 'src/app/services/topping.service';
+import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
-describe('SinglePizzaComponent', () => {
-  let component: SinglePizzaComponent;
-  let fixture: ComponentFixture<SinglePizzaComponent>;
+describe('PizzaFormComponent', () => {
+  let component: PizzaFormComponent;
+  let fixture: ComponentFixture<PizzaFormComponent>;
 
   const pizzaServiceMock = jasmine.createSpyObj('PizzaService', ['getById', 'update', 'add', 'assing', 'delete']);
   const toppingServiceMock = jasmine.createSpyObj('ToppingService', ['getAll']);
   const routeMock = { snapshot: { paramMap: { get: jasmine.createSpy('get') } } };
+  const locationMock = jasmine.createSpyObj('Location', ['back']);
   const routerMock = jasmine.createSpyObj('Router', ['navigate']);
+  const sort = environment.sorters.toppings[0].id;
+  const limit = environment.api.limit;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SinglePizzaComponent],
+      declarations: [PizzaFormComponent],
       providers: [
         FormBuilder,
         { provide: PizzaService, useValue: pizzaServiceMock },
         { provide: ToppingService, useValue: toppingServiceMock },
         { provide: ActivatedRoute, useValue: routeMock },
+        { provide: Location, useValue: locationMock },
         { provide: Router, useValue: routerMock }
       ]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(SinglePizzaComponent);
+    fixture = TestBed.createComponent(PizzaFormComponent);
     component = fixture.componentInstance;
   });
 
   it('should evaluate path param to create a new pizza', () => {
-    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue('create');
+    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue(null);
     toppingServiceMock.getAll.and.returnValue(EMPTY);
     fixture.detectChanges();
 
@@ -58,14 +64,14 @@ describe('SinglePizzaComponent', () => {
   it('#loadTopping should call PizzaService to load the pageable "1" by default', () => {
     const topping = { id: 22, name: '', type: '', price: 0 };
     const pageable = { currentPage: 1, totalPages: 1, totalItems: 1, items: [topping] };
-    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue('create');
-    toppingServiceMock.getAll.and.returnValue(of(pageable));
+    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue(null);
+    toppingServiceMock.getAll.withArgs(1, limit, sort).and.returnValue(of(pageable));
     fixture.detectChanges();
 
     component.loadTopping();
 
     expect(component).toBeTruthy();
-    expect(toppingServiceMock.getAll).toHaveBeenCalledWith(1);
+    expect(toppingServiceMock.getAll).toHaveBeenCalledWith(1, limit, sort);
     expect(routeMock.snapshot.paramMap.get).toHaveBeenCalledWith('pizzaId');
   });
 
@@ -87,7 +93,7 @@ describe('SinglePizzaComponent', () => {
   });
 
   it('#cancel should call Router to navigate to "/pizzas"', () => {
-    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue('create');
+    routeMock.snapshot.paramMap.get.withArgs('pizzaId').and.returnValue(null);
     toppingServiceMock.getAll.and.returnValue(EMPTY);
     fixture.detectChanges();
 
@@ -95,7 +101,7 @@ describe('SinglePizzaComponent', () => {
 
     expect(component).toBeTruthy();
     expect(toppingServiceMock.getAll).toHaveBeenCalled();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['pizzas']);
+    expect(locationMock.back).toHaveBeenCalled();
   });
 
   it('#onActions should call to PizzaService  to delete an already existing pizza', () => {
