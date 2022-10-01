@@ -8,7 +8,7 @@ const pizzas = [...Array(10).keys()].map(id => `pz${id + 1}`);
 export const environment = {
   production: false,
   api: {
-    url: 'http://localhost:5001/api/great-pizza',
+    url: 'https://localhost:5001/api',
     error: 'The server encountered an internal error and was unable to complete your request.',
     expirationTime: 180000,
     limit: 50
@@ -35,13 +35,13 @@ export const environment = {
     ]
   },
   firebase: {
-    apiKey: "xxx",
-    authDomain: "xxx",
-    projectId: "xxx",
-    storageBucket: "xxx",
-    messagingSenderId: "xxx",
-    appId: "xxx",
-    measurementId: "xxx"
+    apiKey: 'xxx',
+    authDomain: 'xxx',
+    projectId: 'xxx',
+    storageBucket: 'xxx',
+    messagingSenderId: 'xxx',
+    appId: 'xxx',
+    measurementId: 'xxx'
   }
 };
 
