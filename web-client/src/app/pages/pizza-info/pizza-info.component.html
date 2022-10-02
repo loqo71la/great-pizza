@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="d-flex align-items-center gap-1" *ngFor="let rating of ratings.reverse();">
+        <div class="d-flex align-items-center gap-1" *ngFor="let rating of reverseRatings">
           <span class="rating-left">{{rating.id}}</span>
           <div class="progress flex-grow-1">
             <div class="progress-bar bg-secondary" [style]="rating.style"></div>

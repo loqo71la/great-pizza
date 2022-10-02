@@ -13,7 +13,7 @@ export class AuthService {
   private user: Promise<User | null>;
 
   constructor(private auth: Auth) {
-    this.user = this.loadUser();
+    this.user = this.loadUserPromise();
   }
 
   getUser(): Promise<User | null> {
@@ -24,12 +24,14 @@ export class AuthService {
     return this.userListener;
   }
 
-  signInWithGitHub(): Promise<UserCredential> {
-    return signInWithPopup(this.auth, new GithubAuthProvider());
+  signInWithGitHub(): Promise<void> {
+    return signInWithPopup(this.auth, new GithubAuthProvider())
+      .then(data => { this.user = new Promise((resolve, _) => resolve(this.loadUser(data.user))) });
   }
 
-  signInWithGoogle(): Promise<UserCredential> {
-    return signInWithPopup(this.auth, new GoogleAuthProvider());
+  signInWithGoogle(): Promise<void> {
+    return signInWithPopup(this.auth, new GoogleAuthProvider())
+      .then(data => { this.user = new Promise((resolve, _) => resolve(this.loadUser(data.user))) });
   }
 
   signOut(): Promise<void> {
@@ -39,24 +41,29 @@ export class AuthService {
     return onSignOut(this.auth);
   }
 
-  private loadUser(forceRefresh: boolean = false): Promise<User | null> {
+  private loadUserPromise(forceRefresh: boolean = false): Promise<User | null> {
     return new Promise((resolve, _) => {
       onAuthStateChanged(this.auth, async (fbUser: FBUser | null) => {
         if (!fbUser) resolve(fbUser);
         else {
-          const { token, expirationTime } = await fbUser.getIdTokenResult(forceRefresh);
-          const currentUser = {
-            accessToken: token,
-            email: fbUser.email || '',
-            image: fbUser.photoURL || '',
-            name: fbUser.displayName || ''
-          };
-          this.userListener.next(currentUser);
-          this.loadTimer(expirationTime);
+          const currentUser = await this.loadUser(fbUser, forceRefresh);
           resolve(currentUser);
         }
       });
     });
+  }
+
+  private async loadUser(fbUser: FBUser, forceRefresh: boolean = false) {
+    const { token, expirationTime } = await fbUser.getIdTokenResult(forceRefresh);
+    const currentUser = {
+      accessToken: token,
+      email: fbUser.email || '',
+      image: fbUser.photoURL || '',
+      name: fbUser.displayName || ''
+    };
+    this.userListener.next(currentUser);
+    this.loadTimer(expirationTime);
+    return currentUser;
   }
 
   private loadTimer(time: string): void {
@@ -64,6 +71,6 @@ export class AuthService {
     const current = (new Date()).getTime();
     const delta = expiration - current - environment.api.expirationTime;
     if (this.timer) clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.user = this.loadUser(true), (delta > 0) ? delta : 0);
+    this.timer = setTimeout(() => this.user = this.loadUserPromise(true), (delta > 0) ? delta : 0);
   };
 }

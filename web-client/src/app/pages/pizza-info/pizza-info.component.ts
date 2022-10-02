@@ -27,6 +27,10 @@ export class PizzaInfoComponent implements OnInit {
     private location: Location,
     private router: Router) { }
 
+  get reverseRatings() {
+    return this.ratings.map(item => item).reverse();
+  }
+
   ngOnInit(): void {
     const pizzaId = this.route.snapshot.paramMap.get('pizzaId');
     this.pizzaService.getById(pizzaId!)
