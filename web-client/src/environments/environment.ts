@@ -9,6 +9,7 @@ export const environment = {
   production: false,
   api: {
     url: 'https://localhost:5001/api',
+    auth: 'https://app.loqo71la.dev/auth?client_id=4r97jsiucp6sk1nddo37huydf1&response_type=code',
     error: 'The server encountered an internal error and was unable to complete your request.',
     expirationTime: 180000,
     limit: 50
@@ -33,15 +34,6 @@ export const environment = {
       { id: 'name-asc', name: 'Name A-Z' },
       { id: 'name-desc', name: 'Name Z-A' }
     ]
-  },
-  firebase: {
-    apiKey: 'xxx',
-    authDomain: 'xxx',
-    projectId: 'xxx',
-    storageBucket: 'xxx',
-    messagingSenderId: 'xxx',
-    appId: 'xxx',
-    measurementId: 'xxx'
   }
 };
 

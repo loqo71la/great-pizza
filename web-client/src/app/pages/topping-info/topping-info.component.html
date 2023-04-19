@@ -22,6 +22,12 @@
         {{topping.price | number:'.2'}}
       </p>
       <p class="mb-1">
+        <label class="d-block fw-bold small">Created By</label>{{topping.createdBy}}
+      </p>
+      <p class="mb-1">
+        <label class="d-block fw-bold small">Updated By</label>{{topping.modifiedBy}}
+      </p>
+      <p class="mb-1">
         <label class="d-block fw-bold small">Created Date</label>{{topping.createdDate | date: 'MMM d, y, h:mm
         a'}}
       </p>

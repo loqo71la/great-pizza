@@ -3,22 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { MapperUtil } from '../shared/utils/mapper-util';
 import { Pageable } from '../shared/models/pageable';
 import { Pizza } from '../shared/models/pizza';
-import { User } from '../shared/models/user';
+import { StorageUtil } from '../shared/utils/storage-util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PizzaService {
-  private user: User | null = null;
 
-  constructor(private http: HttpClient, private authSerivce: AuthService) {
-    this.authSerivce.getUserListener().subscribe(user => this.user = user);
-  }
+  constructor(private http: HttpClient) { }
 
   getAll(page: number, limit: number, sort: string): Observable<Pageable<Pizza>> {
     return this.http.get<Pageable<any>>(`${environment.api.url}/pizza`, { params: { page, limit, sort } })
@@ -54,7 +50,7 @@ export class PizzaService {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user?.accessToken}`
+        Authorization: `Bearer ${StorageUtil.fromLocal('idToken')}`
       })
     };
   }

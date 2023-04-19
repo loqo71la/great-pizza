@@ -48,6 +48,14 @@
         <span *ngIf="totalToppingPrice"> + {{totalToppingPrice | number:'.2'}} = </span>
         <span *ngIf="totalToppingPrice" class="total-price">{{pizza.price + totalToppingPrice | number:'.2'}}</span>
       </p>
+    </section>
+    <section class="row row-cols-md-2 mt-2 px-2">
+      <p class="mb-1">
+        <label class="d-block fw-bold small">Created By</label>{{pizza.createdBy}}
+      </p>
+      <p class="mb-1">
+        <label class="d-block fw-bold small">Updated By</label>{{pizza.modifiedBy}}
+      </p>
       <p class="mb-1">
         <label class="d-block fw-bold small">Created Date</label>{{pizza.createdDate | date: 'MMM d, y, h:mm a'}}
       </p>

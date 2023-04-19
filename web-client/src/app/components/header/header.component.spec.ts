@@ -10,7 +10,7 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
-  const authServiceMock = jasmine.createSpyObj('AuthService', ['getUserListener', 'signOut']);
+  const authServiceMock = jasmine.createSpyObj('AuthService', ['signOut'], {user: new BehaviorSubject(undefined)});
   const eventSubject = new ReplaySubject<RouterEvent>();
   const routerMock = {
     navigate: jasmine.createSpy('navigate'),
@@ -30,7 +30,6 @@ describe('HeaderComponent', () => {
   });
 
   beforeEach(() => {
-    authServiceMock.getUserListener.and.returnValue(new BehaviorSubject(null));
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

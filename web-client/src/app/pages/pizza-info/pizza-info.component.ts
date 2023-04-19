@@ -59,51 +59,47 @@ export class PizzaInfoComponent implements OnInit {
   }
 
   rate(index: number): void {
-    this.authService.getUser().then(user => {
-      if (!user) {
-        this.router.navigate(['login']);
-        return;
-      }
+    if (!this.authService.user.value) {
+      this.authService.signIn();
+      return;
+    }
 
-      this.isDisableRating = true;
-      this.ratings[index].selected = true;
-      this.pizzaService.qualify(this.pizza.id, index + 1)
-        .subscribe({
-          next: (response: any) => {
-            alert(response.message);
-            this.router.navigate(['/']);
-          },
-          error: (response: any) => {
-            alert(response.error.message ?? environment.api.error);
-            this.isDisableRating = false;
-            this.ratings[index].selected = false;
-          }
-        });
-    });
+    this.isDisableRating = true;
+    this.ratings[index].selected = true;
+    this.pizzaService.qualify(this.pizza.id, index + 1)
+      .subscribe({
+        next: (response: any) => {
+          alert(response.message);
+          this.router.navigate(['/']);
+        },
+        error: (response: any) => {
+          alert(response.error.message ?? environment.api.error);
+          this.isDisableRating = false;
+          this.ratings[index].selected = false;
+        }
+      });
   }
 
   delete(): void {
-    this.authService.getUser().then(user => {
-      if (!user) {
-        this.router.navigate(['login']);
-        return;
-      }
+    if (!this.authService.user.value) {
+      this.authService.signIn();
+      return;
+    }
 
-      const response = confirm(`Are you sure you want to delete "${this.pizza.name}"`);
-      if (!response) return;
+    const response = confirm(`Are you sure you want to delete "${this.pizza.name}"`);
+    if (!response) return;
 
-      this.isDeleteLoading = true;
-      this.pizzaService.delete(this.pizza.id)
-        .subscribe({
-          next: _ => {
-            this.isDeleteLoading = false;
-            this.cancel();
-          },
-          error: (response: any) => {
-            alert(response.error.message ?? environment.api.error);
-            this.isDeleteLoading = false;
-          }
-        });
-    });
+    this.isDeleteLoading = true;
+    this.pizzaService.delete(this.pizza.id)
+      .subscribe({
+        next: _ => {
+          this.isDeleteLoading = false;
+          this.cancel();
+        },
+        error: (response: any) => {
+          alert(response.error.message ?? environment.api.error);
+          this.isDeleteLoading = false;
+        }
+      });
   }
 }

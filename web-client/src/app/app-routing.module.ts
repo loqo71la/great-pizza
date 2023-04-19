@@ -2,12 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
 import { PizzaFormComponent } from './pages/pizza-form/pizza-form.component';
 import { PizzaInfoComponent } from './pages/pizza-info/pizza-info.component';
 import { PizzaListComponent } from './pages/pizza-list/pizza-list.component';
@@ -23,7 +20,6 @@ import { ViewerItemsComponent } from './components/viewers/viewer-items/viewer-i
 import { ViewerPageComponent } from './components/viewers/viewer-page/viewer-page.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { environment } from 'src/environments/environment';
 import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
@@ -41,10 +37,6 @@ const routes: Routes = [
       { path: 'toppings/:toppingId', component: ToppingInfoComponent },
       { path: 'toppings/:toppingId/update', component: ToppingFormComponent, canActivate: [AuthGuard] }
     ]
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   }
 ];
 
@@ -54,9 +46,7 @@ const routes: Routes = [
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth())
+    RouterModule.forRoot(routes)
   ],
   exports: [RouterModule],
   declarations: [
@@ -75,7 +65,6 @@ const routes: Routes = [
     ViewerPageComponent,
     LoaderComponent,
     FooterComponent,
-    LoginComponent,
     PizzaInfoComponent,
     ToppingInfoComponent
   ]
