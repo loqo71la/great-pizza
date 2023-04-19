@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToppingService } from 'src/app/services/topping.service';
 import { Topping } from 'src/app/shared/models/topping';
@@ -18,8 +18,7 @@ export class ToppingInfoComponent implements OnInit {
   constructor(private toppingService: ToppingService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private location: Location,
-    private router: Router) { }
+    private location: Location) { }
 
   ngOnInit(): void {
     const toppingId = this.route.snapshot.paramMap.get('toppingId');
@@ -40,27 +39,25 @@ export class ToppingInfoComponent implements OnInit {
   }
 
   delete(): void {
-    this.authService.getUser().then(user => {
-      if (!user) {
-        this.router.navigate(['login']);
-        return;
-      }
+    if (!this.authService.user.value) {
+      this.authService.signIn();
+      return;
+    }
 
-      const response = confirm(`Are you sure you want to delete "${this.topping.name}"`);
-      if (!response) return;
+    const response = confirm(`Are you sure you want to delete "${this.topping.name}"`);
+    if (!response) return;
 
-      this.isDeleteLoading = true;
-      this.toppingService.delete(this.topping.id)
-        .subscribe({
-          next: _ => {
-            this.isDeleteLoading = false;
-            this.cancel();
-          },
-          error: (response: any) => {
-            alert(response.error.message ?? environment.api.error);
-            this.isDeleteLoading = false;
-          }
-        });
-    });
+    this.isDeleteLoading = true;
+    this.toppingService.delete(this.topping.id)
+      .subscribe({
+        next: _ => {
+          this.isDeleteLoading = false;
+          this.cancel();
+        },
+        error: (response: any) => {
+          alert(response.error.message ?? environment.api.error);
+          this.isDeleteLoading = false;
+        }
+      });
   }
 }

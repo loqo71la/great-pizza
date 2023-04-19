@@ -4,5 +4,7 @@ export interface Topping {
   type: string;
   price: number;
   createdDate?: Date;
+  createdBy?: string;
   modifiedDate?: Date;
+  modifiedBy?: string;
 }

@@ -5,7 +5,8 @@ svg {
 }
 
 .text-decoration-none {
-    color: gray;
+    color: black;
+    font-weight: 400;
 }
 
 svg:hover, .text-decoration-none:hover {

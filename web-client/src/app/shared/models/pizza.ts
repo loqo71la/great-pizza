@@ -14,4 +14,6 @@ export interface Pizza {
   toppings?: Topping[];
   toppingPrice?: number;
   toppingDetail?: string;
+  createdBy?: string;
+  modifiedBy?: string;
 }

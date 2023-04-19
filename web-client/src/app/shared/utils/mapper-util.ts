@@ -14,7 +14,9 @@ export abstract class MapperUtil {
       rating: Number(item.rating),
       toppings: item.toppings || '',
       toppingPrice: item.toppingPrice,
-      toppingDetail: item.toppingDetail
+      toppingDetail: item.toppingDetail,
+      createdBy: item.createdBy,
+      modifiedBy: item.updatedBy
     };
     if (item.createdAt) pizza.createdDate = new Date(item.createdAt);
     if (item.updatedAt) pizza.modifiedDate = new Date(item.updatedAt);
@@ -27,6 +29,8 @@ export abstract class MapperUtil {
       name: item.name,
       type: item.type,
       price: item.price,
+      createdBy: item.createdBy,
+      modifiedBy: item.updatedBy
     };
     if (item.createdAt) topping.createdDate = new Date(item.createdAt);
     if (item.updatedAt) topping.modifiedDate = new Date(item.updatedAt);

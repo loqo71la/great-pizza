@@ -16,12 +16,15 @@
 
     <div class="dropdown" *ngIf="user; else login">
       <button class="btn avatar" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <img [src]="user.image" alt="Avatar">
+        <img [src]="user.imageUrl" alt="Avatar" *ngIf="!guest; else guestBlock">
+        <ng-template #guestBlock>
+          <p [ngStyle]="{'background-color': guest?.background, 'color': guest?.text}">G</p>
+        </ng-template>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
         <li class="dropdown-item-text opacity-75">
-          <p class="mb-0">{{user.name}}</p>
-          <p class="mb-0"><small>{{user.email}}</small></p>
+          <p class="mb-0">{{user.username}}</p>
+          <p class="mb-0" *ngIf="user.email"><small>{{user.email}}</small></p>
         </li>
         <li>
           <hr class="dropdown-divider">
@@ -33,7 +36,7 @@
     </div>
 
     <ng-template #login>
-      <button type="button" class="btn btn-outline-secondary" routerLink="/login" >Sign In</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="signIn()">Sign In</button>
     </ng-template>
 
     <div class="dropdown">

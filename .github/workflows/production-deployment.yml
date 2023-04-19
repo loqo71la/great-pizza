@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-env:
-  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
 jobs:
   web-client-deploy:
     runs-on: ubuntu-latest
@@ -29,13 +26,7 @@ jobs:
       - name: Setup environment variables
         run: |
           sed -i -E "s/url: '.+'/url: '${{ secrets.REST_API_CONNECTION }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/apiKey: 'xxx'/apiKey: '${{ secrets.FIREBASE_API_KEY }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/authDomain: 'xxx'/authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/projectId: 'xxx'/projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/storageBucket: 'xxx'/storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/messagingSenderId: 'xxx'/messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/appId: 'xxx'/appId: '${{ secrets.FIREBASE_API_ID }}'/" ./src/environments/environment.prod.ts
-          sed -i -E "s/measurementId: 'xxx'/measurementId: '${{ secrets.FIREBASE_MEASUREMENT_ID }}'/" ./src/environments/environment.prod.ts
+          sed -i -E "s/auth: '.+'/auth: '${{ secrets.REST_AUTH_CONNECTION }}'/" ./src/environments/environment.prod.ts
 
       - name: Build project
         run: npm run build
@@ -47,26 +38,3 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GREAT_PIZZA_LOQO71LA }}'
           channelId: live
           projectId: great-pizza-loqo71la
-
-  rest-api-deploy:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./rest-api
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup default connection
-        run: |
-          sed -i -E "s/DefaultConnection\": \".+\"/DefaultConnection\": \"${{ secrets.DB_CONNECTION }}\"/" ./GreatPizza.Infrastructure/appsettings.json
-          sed -i -E "s/WebClientOrigin\": \".+\"/WebClientOrigin\": \"${{ secrets.WEB_CLIENT_ORIGIN }}\"/" ./GreatPizza.WebApi/appsettings.json
-
-      - name: Docker login
-        run: echo ${{ secrets.HEROKU_API_KEY }} | docker login -u _ --password-stdin registry.heroku.com
-
-      - name: Build Docker image
-        run: heroku container:push web -a great-pizza
-
-      - name: Deploy to Heroku
-        run: heroku container:release web -a great-pizza

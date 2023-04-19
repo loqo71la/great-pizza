@@ -8,18 +8,14 @@ import { Pageable } from '../shared/models/pageable';
 import { Response } from '../shared/models/response';
 import { environment } from 'src/environments/environment';
 import { MapperUtil } from '../shared/utils/mapper-util';
-import { User } from '../shared/models/user';
-import { AuthService } from './auth.service';
+import { StorageUtil } from '../shared/utils/storage-util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToppingService {
-  private user: User | null = null;
 
-  constructor(private http: HttpClient, private authSerivce: AuthService) {
-    this.authSerivce.getUserListener().subscribe(user => this.user = user);
-  }
+  constructor(private http: HttpClient) { }
 
   getAll(page: number, limit: number, sort: string): Observable<Pageable<Topping>> {
     return this.http.get<Pageable<any>>(`${environment.api.url}/topping`, { params: { page, limit, sort } })
@@ -47,7 +43,7 @@ export class ToppingService {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user?.accessToken}`
+        Authorization: `Bearer ${StorageUtil.fromLocal('idToken')}`
       })
     };
   }

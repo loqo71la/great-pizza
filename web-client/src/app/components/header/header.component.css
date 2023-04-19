@@ -9,10 +9,15 @@
     padding: 0rem;
 }
 
-.avatar img {
+.avatar img, .avatar p {
     width: 2rem;
     height: 2rem;
     border-radius: 1.5rem;
+}
+
+.avatar p {
+    margin-bottom: 0rem;
+    padding-top: 0.2rem;
 }
 
 .btn-outline-secondary {
